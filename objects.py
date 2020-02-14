@@ -52,4 +52,4 @@ class PublicUserObject:
         self.user_public_object_id = user_public_object_id # (String) The Spotify user ID for this user.
         self.user_public_profile_images = user_profile_images #(Array of image objects) The users profile image
         self.user_type = user_type #(string) The object type "user"
-        self.user_uri = user_uri #(String) The Spotify URI for this user
+        self.user_uri = user_uri #(String) The Spotify URI for this user hi
