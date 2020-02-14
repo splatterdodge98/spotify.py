@@ -53,3 +53,16 @@ class PublicUserObject:
         self.user_public_profile_images = user_profile_images #(Array of image objects) The users profile image
         self.user_type = user_type #(string) The object type "user"
         self.user_uri = user_uri #(String) The Spotify URI for this user hi
+
+class Artist:
+    def __init__(self, external_urls, followers, genres, href, artist_id, images, artist_name, popularity, type, uri):
+        self.external_urls = external_urls #Dictionary of Size 1 (External URL Object)
+        self.followers = followers #Dictionary of Size 1
+        self.genres = genres #String Array
+        self.href = href #String
+        self.artist_id = artist_id #String
+        self.images = images #List<String> of image urls
+        self.artist_name = artist_name #String
+        self.popularity = popularity #Integer, btwn 0-100
+        self.type = type #String. Type of the object (artist).
+        self.uri = uri #String
