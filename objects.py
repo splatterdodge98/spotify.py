@@ -108,6 +108,20 @@ class PlaylistObject:
         self.type = type #String. The type of the object, playlist
         self.uri = uri #String
 
+class PrivateUserObject:
+
+    def __init__(self, country, display_name, email, external_urls, followers, href, user_id, images, product, type, uri):
+        self.country = country #String. ISO 3166-1 alpha country code
+        self.display_name = display_name #String.
+        self.email = email #String.
+        self.external_urls = external_urls #2 String Dictionary {location:url} structure
+        self.href = href #Striing. Link to Web API endpoint
+        self.user_id = user_id #String.
+        self.images = images #List<String> of the urls for each image
+        self.product = product #String. Spotify subscription level. May be null
+        self.type = type #String. Object typ: user
+        self.uri = uri #String
+
 class category:
 
     def __init__(self, href, icons, id, name):
