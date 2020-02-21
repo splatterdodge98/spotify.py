@@ -107,3 +107,36 @@ class PlaylistObject:
         self.tracks = tracks #2 String Dictionary of each track, {name:id} structure.
         self.type = type #String. The type of the object, playlist
         self.uri = uri #String
+
+class category:
+
+    def __init__(self, href, icons, id, name):
+        self.href = href # String type
+        self.icons = icons # List of images
+        self.id = id # String type
+        self.name = name # String type
+
+
+class SavedAlbum:
+
+    def __init__(self, albumType, artists, externalIds, externalUrls, genres, album_id, images, name, releaseDate,
+                 tracks, timestamp, URI):
+        self.albumType = albumType  # String type
+        self.artists = artists  # List of Names of the Artists
+        self.externalIds = externalIds  # ExternalID Object
+        self.externalUrls = externalUrls  # ExternalURLS Object
+        self.genres = genres  # list of strings
+        self.album_id = album_id  # String
+        self.images = images  # Url for the image
+        self.name = name  # String
+        self.releaseDate = releaseDate  # String that we'll convert to DateTime
+        self.tracks = tracks  # Dictionary with {name:id} structure
+        self.timestamp = timestamp # datetime type
+        self.URI = URI  # string
+
+class ExternalId
+
+    def __init__(self, ean, isrc, upc):
+        self.ean = ean # string
+        self.isrc = isrc # string
+        self.upc = upc # string
