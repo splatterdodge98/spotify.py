@@ -93,3 +93,10 @@ class SavedAlbum:
         self.tracks = tracks  # Dictionary with {name:id} structure
         self.timestamp = timestamp # datetime type
         self.URI = URI  # string
+
+class ExternalId
+
+    def __init__(self, ean, isrc, upc):
+        self.ean = ean # string
+        self.isrc = isrc # string
+        self.upc = upc # string
