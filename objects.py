@@ -134,7 +134,7 @@ class SavedAlbum:
         self.timestamp = timestamp # datetime type
         self.URI = URI  # string
 
-class ExternalId
+class ExternalId:
 
     def __init__(self, ean, isrc, upc):
         self.ean = ean # string
