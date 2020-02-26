@@ -55,7 +55,7 @@ class PublicUserObject:
         self.user_public_object_id = user_public_object_id # (String) The Spotify user ID for this user.
         self.user_public_profile_images = user_profile_images #(Array of image objects) The users profile image
         self.user_type = user_type #(string) The object type "user"
-        self.user_uri = user_uri #(String) The Spotify URI for this user hi
+        self.user_uri = user_uri #(String) The Spotify URI for this user
 
 class Artist:
 
@@ -154,3 +154,29 @@ class ExternalId:
         self.ean = ean # string
         self.isrc = isrc # string
         self.upc = upc # string
+        
+class TrackObject:
+    
+    def __init__(self, album_id, artists, available_markets, disc_num, duration_ms, explicit, external_ids, external_urls, 
+                 href, track_id, is_playable, linked_from, restrictions, name, popularity, preview_url, track_num, type, uri, is_local)
+    self.album_id = album_id #String
+    self.artists = artists #List of Artist Names (Strings)
+    self.available_markets = available_markets #List of Strings. Identifies each country in which the track is available
+    self.disc_num = disc_num #Integer. On which disc is the track
+    self.duration_ms = duration_ms #Integer. Track length in ms
+    self.explicit = explicit #Boolean. Is the track explicit or not
+    self.external_ids = external_ids #String Dictionary of Size 2 (External ID Object)
+    self.external_urls = external_urls #String Dictionary of Size 2 (External URL Object)
+    self.href = href #String.
+    self.track_id = track_id #String
+    self.is_playable = is_playable #Boolean
+    self.linked_from = linked_from #String(?) Same as href???
+    self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
+    self.name = name #String
+    self.popularity = popularity #Integer. Value btwn 0-100
+    self.preview_url = preview_url #String. Link to a preview
+    self.track_num = track_num #Integer
+    self.type = type #String. Object type (track)
+    self.uri = uri #String
+    self.is_local = is_loacl #Boolean
+    
