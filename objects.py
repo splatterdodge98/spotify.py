@@ -1,13 +1,13 @@
-class album:
+class Album:
 
-    def __init__(self, albumType, artists, externalIds, externalUrls, genres, album_id, images, name, releaseDate,
+    def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate,
                  tracks, URI):
         self.albumType = albumType  # String type
         self.artists = artists  # List of Names of the Artists
         self.externalIds = externalIds  # ExternalID Object
         self.externalUrls = externalUrls  # ExternalURLS Object
         self.genres = genres  # list of strings
-        self.album_id = album_id  # String
+        self.albumId = albumId  # String
         self.images = images  # Url for the image
         self.name = name  # String
         self.releaseDate = releaseDate  # String that we'll convert to DateTime
@@ -17,112 +17,112 @@ class album:
 
 class RecommendationSeedObject:
 
-    def __init__(self, initialPoolSize, afterFilterSize, afterRelinkingSize, href, recomendation_id,
-                 recomendation_type):
-        self.init_pool_size = initialPoolSize #Integer
-        self.after_filter_size = afterFilterSize #Integer
-        self.after_relegation_size = afterRelinkingSize #Integer
+    def __init__(self, initialPoolSize, afterFilterSize, afterRelinkingSize, href, recomendationId,
+                 recomendationType):
+        self.initPoolSize = initialPoolSize #Integer
+        self.afterFilterSize = afterFilterSize #Integer
+        self.afterRelinkingSize = afterRelinkingSize #Integer
         self.href = href #String
-        self.recomendation_id = recomendation_id #String
-        self.recomendation_type = recomendation_type #String
+        self.recomendationId = recomendationId #String
+        self.recomendationType = recomendationType #String
 
 
 class ContextObject:
 
-    def __init__(self, uri, href, external_urls, context_type, ):
+    def __init__(self, uri, href, externalUrls, contextType):
         self.uri = uri #String
         self.href = href #String
-        self.external_urls = external_urls #String Dictionary of Size 2 (External URL Object)
-        self.context_type = context_type #String
+        self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
+        self.contextType = contextType #String
 
 
 class CursorBasedPagingObject:
 
-    def __init__(self, href, items, limit, next_page, cursors, total, ):
+    def __init__(self, href, items, limit, nextPage, cursors, total):
         self.href = href #String
         self.items = items #Array of Objects (Unsure what kind)
-        self.next_page = next_page #String (URL of next page)
+        self.nextPage = nextPage #String (URL of next page)
         self.cursors = cursors #String (Cursor Object)
         self.total = total #Integer
 
 class PublicUserObject:
 
-    def __init__(self, display_name, external_urls, followers, href, user_public_object_id, user_profile_images, user_type, user_uri):
-        self.display_name = display_name # (String)	The name displayed on the user’s profile. null if not available.
-        self.extrnal_urls = external_urls # (external URL Object) Known public external URLs for this user
+    def __init__(self, displayName, externalUrls, followers, href, userPublicObjectId, userProfileImages, userType, userUri):
+        self.displayName = displayName # (String)	The name displayed on the user’s profile. null if not available.
+        self.extrnalUrls = externalUrls # (external URL Object) Known public external URLs for this user
         self.followers = followers # (a followers object) Information about the followers of this user
         self.href = href # (String) 	A link to the Web API endpoint for this user.
-        self.user_public_object_id = user_public_object_id # (String) The Spotify user ID for this user.
-        self.user_public_profile_images = user_profile_images #(Array of image objects) The users profile image
-        self.user_type = user_type #(string) The object type "user"
-        self.user_uri = user_uri #(String) The Spotify URI for this user
+        self.userPublicObjectId = userPublicObjectId # (String) The Spotify user ID for this user.
+        self.userPublicProfileImages = userProfileImages #(Array of image objects) The users profile image
+        self.userType = userType #(string) The object type "user"
+        self.userUri = userUri #(String) The Spotify URI for this user
 
 class Artist:
 
-    def __init__(self, external_urls, followers, genres, href, artist_id, images, artist_name, popularity, type, uri):
-        self.external_urls = external_urls #Dictionary of Size 1 (External URL Object)
+    def __init__(self, externalUrls, followers, genres, href, artistId, images, artistName, popularity, type, uri):
+        self.externalUrls = externalUrls #Dictionary of Size 1 (External URL Object)
         self.followers = followers #Dictionary of Size 1
         self.genres = genres #String Array
         self.href = href #String
-        self.artist_id = artist_id #String
+        self.artistId = artistId #String
         self.images = images #List<String> of image urls
-        self.artist_name = artist_name #String
+        self.artistName = artistName #String
         self.popularity = popularity #Integer, btwn 0-100
         self.type = type #String. Type of the object (artist).
         self.uri = uri #String
 
 class CurrentlyPlayingObject:
 
-    def __init__(self, context, currently_playing_type, is_playing, item, progress_ms, timestamp):
+    def __init__(self, context, currentlyPlayingType, isPlaying, item, progressMs, timestamp):
         self.context = context #ContextObject
-        self.currently_playing_type = currently_playing_type #String. Type of item playing; either track, episode, ad, or unknown
-        self.is_playing = is_playing #Boolean.
+        self.currentlyPlayingType = currentlyPlayingType #String. Type of item playing; either track, episode, ad, or unknown
+        self.isPlaying = isPlaying #Boolean.
         self.item = item #String ID of the Track Object.
-        self.progress_ms = progress_ms #Integer. Progress in current track, can be null
+        self.progressMs = progressMs #Integer. Progress in current track, can be null
         self.timestamp = timestamp #integer. Time when fetched.
 
 class DeviceObject:
 
-    def __init__(self, device_id, is_active, is_private_session, is_restricted, name, type, volume_percent):
-        self.device_id = device_id #String. ID of the device, may be null
-        self.is_active = is_active #Boolean. Is this device currently active or not
-        self.is_private_session = is_private_session #Boolean.
-        self. is_restricted = is_restricted #Boolean. True, no API commands allowed
+    def __init__(self, deviceId, isActive, isPrivateSession, isRestricted, name, type, volumePercent):
+        self.deviceId = deviceId #String. ID of the device, may be null
+        self.isActive = isActive #Boolean. Is this device currently active or not
+        self.isPrivateSession = isPrivateSession #Boolean.
+        self.isRestricted = isRestricted #Boolean. True, no API commands allowed
         self.name = name #String. Name of the device
         self.type = type #String. Type of device running Spotify
-        self.volume_percent = volume_percent #Integer. Current Volume in percentage. May be null.
+        self.volumePercent = volumePercent #Integer. Current Volume in percentage. May be null.
 
 class PlaylistObject:
 
-    def __init__(self, collaborative, external_urls, href, playlist_id, images, name, owner, public, snapshot_id, tracks, type, uri):
+    def __init__(self, collaborative, externalUrls, href, playlistId, images, name, owner, public, snapshotId, tracks, type, uri):
         self.collaborative = collaborative #Boolean. True means others can modify playlist
-        self.external_urls = external_urls #2 String Dictionary. {location:url} structure.
+        self.externalUrls = externalUrls #2 String Dictionary. {location:url} structure.
         self.href = href #String. link to the Web API version of the playlist
-        self.playlist_id = playlist_id #String.
+        self.playlistId = playlistId #String.
         self.images = images #List<String> of the urls for each image
         self.name = name #String. Name of the playlist
         self.owner = owner #2 String Dictionary. {Name:ID} structure.
         self.public = public #Boolean
-        self.snapshot_id = snapshot_id #String. Version id of the playlist
+        self.snapshotId = snapshotId #String. Version id of the playlist
         self.tracks = tracks #2 String Dictionary of each track, {name:id} structure.
         self.type = type #String. The type of the object, playlist
         self.uri = uri #String
 
 class PrivateUserObject:
 
-    def __init__(self, country, display_name, email, external_urls, followers, href, user_id, images, product, type, uri):
+    def __init__(self, country, displayName, email, externalUrls, followers, href, userId, images, product, type, uri):
         self.country = country #String. ISO 3166-1 alpha country code
-        self.display_name = display_name #String.
+        self.displayName = displayName #String.
         self.email = email #String.
-        self.external_urls = external_urls #2 String Dictionary {location:url} structure
+        self.externalUrls = externalUrls #2 String Dictionary {location:url} structure
         self.href = href #Striing. Link to Web API endpoint
-        self.user_id = user_id #String.
+        self.userId = userId #String.
         self.images = images #List<String> of the urls for each image
         self.product = product #String. Spotify subscription level. May be null
         self.type = type #String. Object typ: user
         self.uri = uri #String
 
-class category:
+class Category:
 
     def __init__(self, href, icons, id, name):
         self.href = href # String type
@@ -133,14 +133,14 @@ class category:
 
 class SavedAlbum:
 
-    def __init__(self, albumType, artists, externalIds, externalUrls, genres, album_id, images, name, releaseDate,
+    def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate,
                  tracks, timestamp, URI):
         self.albumType = albumType  # String type
         self.artists = artists  # List of Names of the Artists
         self.externalIds = externalIds  # ExternalID Object
         self.externalUrls = externalUrls  # ExternalURLS Object
         self.genres = genres  # list of strings
-        self.album_id = album_id  # String
+        self.albumId = albumId  # String
         self.images = images  # Url for the image
         self.name = name  # String
         self.releaseDate = releaseDate  # String that we'll convert to DateTime
@@ -157,26 +157,26 @@ class ExternalId:
         
 class TrackObject:
     
-    def __init__(self, album_id, artists, available_markets, disc_num, duration_ms, explicit, external_ids, external_urls, 
-                 href, track_id, is_playable, linked_from, restrictions, name, popularity, preview_url, track_num, type, uri, is_local)
-    self.album_id = album_id #String
+    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, 
+                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal)
+    self.albumId = albumId #String
     self.artists = artists #List of Artist Names (Strings)
-    self.available_markets = available_markets #List of Strings. Identifies each country in which the track is available
-    self.disc_num = disc_num #Integer. On which disc is the track
-    self.duration_ms = duration_ms #Integer. Track length in ms
+    self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
+    self.discNum = discNum #Integer. On which disc is the track
+    self.durationMs = durationMs #Integer. Track length in ms
     self.explicit = explicit #Boolean. Is the track explicit or not
-    self.external_ids = external_ids #String Dictionary of Size 2 (External ID Object)
-    self.external_urls = external_urls #String Dictionary of Size 2 (External URL Object)
+    self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
+    self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
     self.href = href #String.
-    self.track_id = track_id #String
-    self.is_playable = is_playable #Boolean
-    self.linked_from = linked_from #String(?) Same as href???
+    self.trackId = trackId #String
+    self.isPlayable = isPlayable #Boolean
+    self.linkedFrom = linkedFrom #String(?) Same as href???
     self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
     self.name = name #String
     self.popularity = popularity #Integer. Value btwn 0-100
-    self.preview_url = preview_url #String. Link to a preview
-    self.track_num = track_num #Integer
+    self.previewUrl = previewUrl #String. Link to a preview
+    self.trackNum = trackNum #Integer
     self.type = type #String. Object type (track)
     self.uri = uri #String
-    self.is_local = is_loacl #Boolean
+    self.isLocal = isLocal #Boolean
     
