@@ -157,51 +157,126 @@ class ExternalId:
         
 class Track:
     
-    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, 
-                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal)
-    self.albumId = albumId #String
-    self.artists = artists #List of Artist Names (Strings)
-    self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
-    self.discNum = discNum #Integer. On which disc is the track
-    self.durationMs = durationMs #Integer. Track length in ms
-    self.explicit = explicit #Boolean. Is the track explicit or not
-    self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
-    self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
-    self.href = href #String.
-    self.trackId = trackId #String
-    self.isPlayable = isPlayable #Boolean
-    self.linkedFrom = linkedFrom #String(?) Same as href???
-    self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
-    self.name = name #String
-    self.popularity = popularity #Integer. Value btwn 0-100
-    self.previewUrl = previewUrl #String. Link to a preview
-    self.trackNum = trackNum #Integer
-    self.type = type #String. Object type (track)
-    self.uri = uri #String
-    self.isLocal = isLocal #Boolean
+    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls,
+                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal):
+        self.albumId = albumId #String
+        self.artists = artists #List of Artist Names (Strings)
+        self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
+        self.discNum = discNum #Integer. On which disc is the track
+        self.durationMs = durationMs #Integer. Track length in ms
+        self.explicit = explicit #Boolean. Is the track explicit or not
+        self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
+        self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
+        self.href = href #String.
+        self.trackId = trackId #String
+        self.isPlayable = isPlayable #Boolean
+        self.linkedFrom = linkedFrom #String(?) Same as href???
+        self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
+        self.name = name #String
+        self.popularity = popularity #Integer. Value btwn 0-100
+        self.previewUrl = previewUrl #String. Link to a preview
+        self.trackNum = trackNum #Integer
+        self.type = type #String. Object type (track)
+        self.uri = uri #String
+        self.isLocal = isLocal #Boolean
 
 class SavedTrack:
     
     def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, 
-                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal, timestamp)
-    self.albumId = albumId #String
-    self.artists = artists #List of Artist Names (Strings)
-    self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
-    self.discNum = discNum #Integer. On which disc is the track
-    self.durationMs = durationMs #Integer. Track length in ms
-    self.explicit = explicit #Boolean. Is the track explicit or not
-    self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
-    self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
-    self.href = href #String.
-    self.trackId = trackId #String
-    self.isPlayable = isPlayable #Boolean
-    self.linkedFrom = linkedFrom #String(?) Same as href???
-    self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
-    self.name = name #String
-    self.popularity = popularity #Integer. Value btwn 0-100
-    self.previewUrl = previewUrl #String. Link to a preview
-    self.trackNum = trackNum #Integer
-    self.type = type #String. Object type (track)
-    self.uri = uri #String
-    self.isLocal = isLocal #Boolean
-    self.timestamp = timestamp #String. Date and time Track was saved,
+                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal, timestamp):
+
+        self.albumId = albumId #String
+        self.artists = artists #List of Artist Names (Strings)
+        self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
+        self.discNum = discNum #Integer. On which disc is the track
+        self.durationMs = durationMs #Integer. Track length in ms
+        self.explicit = explicit #Boolean. Is the track explicit or not
+        self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
+        self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
+        self.href = href #String.
+        self.trackId = trackId #String
+        self.isPlayable = isPlayable #Boolean
+        self.linkedFrom = linkedFrom #String(?) Same as href???
+        self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
+        self.name = name #String
+        self.popularity = popularity #Integer. Value btwn 0-100
+        self.previewUrl = previewUrl #String. Link to a preview
+        self.trackNum = trackNum #Integer
+        self.type = type #String. Object type (track)
+        self.uri = uri #String
+        self.isLocal = isLocal #Boolean
+        self.timestamp = timestamp #String. Date and time Track was saved,
+
+class AudioFeatureObject:
+
+    def __init__(self, acousticness, analysisUrl, danceability, durationMS, energy, id, instrumentalness, key, liveness, loudness, mode, speechiness, tempo, timeSignature, trackHref, type,
+                 uri, valence):
+        self.acousticness = acousticness #Float
+        self.analysisUrl = analysisUrl #string
+        self.danceability = danceability #Float
+        self.durationMS = durationMS #int
+        self.energy = energy #Float
+        self.id =id #String
+        self.instrumentalness = instrumentalness #float
+        self.key = key #int
+        self.liveness = liveness #float
+        self.loudness = loudness #float
+        self.mode = mode #int
+        self.speechiness = speechiness #float
+        self.tempo = tempo #float
+        self.timeSignature = timeSignature #int
+        self.trackHref = trackHref #string
+        self.type = type #string
+        self.uri = uri #string
+        self.valence = valence
+
+class PagingObject:
+
+    def __init__(self, href, items, limit, next, offset, previous, total):
+        self.href = href #string
+        self.items = items #this is gonna be a conversation tomorrow lol
+        self.limit = limit #int
+        self.next = next #string
+        self.offset = offset #int
+        self.previous = previous #String
+        self.total = total #int
+
+class PlayHistoryObject:
+
+    def __init__(self, context, playedAt, track):
+        self.context = context #context object
+        self.playedAt = playedAt #DateTime
+        self.track = track #Dictionary containing {name:id} structure
+
+class PlaylistTrackObject:
+
+    def __init__(self, addedAt, addedBy, isLocal, track):
+        self.addedAt = addedAt #DateTime
+        self.addedBy = addedBy #Public User Object
+        self.isLocal = isLocal
+        self.track = track #dictionary containing {name:id} structure
+
+class RecommendationsResponseObject:
+
+    def __init__(self, seeds, tracks):
+        self.seeds = seeds #list of recommendation seed objects
+        self.tracks = tracks #dictionary containing {name:id} structure
+
+class TuneableTrackObject:
+
+    def __init__(self, acousticness, danceability, durationMS, energy, instrumentalness, key, liveness, loudness, mode, popularity, speechiness, tempo, timeSignature, valence):
+        self.acousticness = acousticness #float
+        self.danceability = danceability #float
+        self.durationMS = durationMS #int
+        self.energy = energy #float
+        self.instrumentalness = instrumentalness #float
+        self.key = key #int
+        self.liveness = liveness #float
+        self.loudness = loudness #float
+        self.mode = mode #int
+        self.popularity = popularity #float
+        self.speechiness = speechiness #float
+        self.tempo = tempo #float
+        self.timeSignature = timeSignature #int
+        self.valence = valence #float
+
