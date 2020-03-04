@@ -59,53 +59,53 @@ class PublicUserObject:
 
 class Artist:
 
-    def __init__(self, externalUrls, followers, genres, href, artistId, images, artistName, popularity, type, uri):
-        self.externalUrls = externalUrls #Dictionary of Size 1 (External URL Object)
-        self.followers = followers #Dictionary of Size 1
+    def __init__(self, externalUrls, followers, genres, href, artistId, images, artistName, popularity, type, userUri):
+        self.externalUrls = externalUrls #2-String Dictionary
+        self.followers = followers #Integer
         self.genres = genres #String Array
         self.href = href #String
         self.artistId = artistId #String
-        self.images = images #List<String> of image urls
+        self.images = images #List<String>
         self.artistName = artistName #String
         self.popularity = popularity #Integer, btwn 0-100
-        self.type = type #String. Type of the object (artist).
-        self.uri = uri #String
+        self.type = type #String
+        self.userUri = userUri #String
 
 class CurrentlyPlayingObject:
 
     def __init__(self, context, currentlyPlayingType, isPlaying, item, progressMs, timestamp):
-        self.context = context #ContextObject
-        self.currentlyPlayingType = currentlyPlayingType #String. Type of item playing; either track, episode, ad, or unknown
-        self.isPlaying = isPlaying #Boolean.
-        self.item = item #String ID of the Track Object.
-        self.progressMs = progressMs #Integer. Progress in current track, can be null
-        self.timestamp = timestamp #integer. Time when fetched.
+        self.context = context #ContextObject(?)
+        self.currentlyPlayingType = currentlyPlayingType #String
+        self.isPlaying = isPlaying #Boolean
+        self.item = item #String
+        self.progressMs = progressMs #Integer
+        self.timestamp = timestamp #Integer
 
 class DeviceObject:
 
     def __init__(self, deviceId, isActive, isPrivateSession, isRestricted, name, type, volumePercent):
-        self.deviceId = deviceId #String. ID of the device, may be null
-        self.isActive = isActive #Boolean. Is this device currently active or not
-        self.isPrivateSession = isPrivateSession #Boolean.
-        self.isRestricted = isRestricted #Boolean. True, no API commands allowed
-        self.name = name #String. Name of the device
-        self.type = type #String. Type of device running Spotify
-        self.volumePercent = volumePercent #Integer. Current Volume in percentage. May be null.
+        self.deviceId = deviceId #String
+        self.isActive = isActive #Boolean
+        self.isPrivateSession = isPrivateSession #Boolean
+        self.isRestricted = isRestricted #Boolean
+        self.name = name #String
+        self.type = type #String
+        self.volumePercent = volumePercent #Integer
 
 class PlaylistObject:
 
     def __init__(self, collaborative, externalUrls, href, playlistId, images, name, owner, public, snapshotId, tracks, type, uri):
-        self.collaborative = collaborative #Boolean. True means others can modify playlist
-        self.externalUrls = externalUrls #2 String Dictionary. {location:url} structure.
-        self.href = href #String. link to the Web API version of the playlist
-        self.playlistId = playlistId #String.
-        self.images = images #List<String> of the urls for each image
-        self.name = name #String. Name of the playlist
-        self.owner = owner #2 String Dictionary. {Name:ID} structure.
+        self.collaborative = collaborative #Boolean
+        self.externalUrls = externalUrls #2-String Dictionary
+        self.href = href #String
+        self.playlistId = playlistId #String
+        self.images = images #List<String>
+        self.name = name #String.
+        self.owner = owner #2-String Dictionary
         self.public = public #Boolean
-        self.snapshotId = snapshotId #String. Version id of the playlist
-        self.tracks = tracks #2 String Dictionary of each track, {name:id} structure.
-        self.type = type #String. The type of the object, playlist
+        self.snapshotId = snapshotId #String
+        self.tracks = tracks #2-String Dictionary
+        self.type = type #String
         self.uri = uri #String
 
 class PrivateUserObject:
