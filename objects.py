@@ -110,17 +110,17 @@ class PlaylistObject:
 
 class PrivateUserObject:
 
-    def __init__(self, country, displayName, email, externalUrls, followers, href, userId, images, product, type, uri):
-        self.country = country #String. ISO 3166-1 alpha country code
-        self.displayName = displayName #String.
-        self.email = email #String.
-        self.externalUrls = externalUrls #2 String Dictionary {location:url} structure
-        self.href = href #Striing. Link to Web API endpoint
-        self.userId = userId #String.
-        self.images = images #List<String> of the urls for each image
-        self.product = product #String. Spotify subscription level. May be null
-        self.type = type #String. Object typ: user
-        self.uri = uri #String
+    def __init__(self, country, displayName, email, externalUrls, followers, href, userId, images, product, type, userUri):
+        self.country = country #String
+        self.displayName = displayName #String
+        self.email = email #String
+        self.externalUrls = externalUrls #2-String Dictionary
+        self.href = href #Striing
+        self.userId = userId #String
+        self.images = images #List<String>
+        self.product = product #String
+        self.type = type #String
+        self.userUri = userUri #String
 
 class Category:
 
@@ -157,26 +157,25 @@ class ExternalId:
         
 class Track:
     
-    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls,
-                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal):
+    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal):
         self.albumId = albumId #String
-        self.artists = artists #List of Artist Names (Strings)
-        self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
-        self.discNum = discNum #Integer. On which disc is the track
-        self.durationMs = durationMs #Integer. Track length in ms
-        self.explicit = explicit #Boolean. Is the track explicit or not
-        self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
-        self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
-        self.href = href #String.
+        self.artists = artists #List<String>
+        self.availableMarkets = availableMarkets #List<String>
+        self.discNum = discNum #Integer
+        self.durationMs = durationMs #Integer
+        self.explicit = explicit #Boolean
+        self.externalIds = externalIds #2-String Dictionary
+        self.externalUrls = externalUrls #2-String Dictionary
+        self.href = href #String
         self.trackId = trackId #String
         self.isPlayable = isPlayable #Boolean
-        self.linkedFrom = linkedFrom #String(?) Same as href???
-        self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
+        self.linkedFrom = linkedFrom #String
+        self.restrictions = restrictions #3-String Dictionary
         self.name = name #String
         self.popularity = popularity #Integer. Value btwn 0-100
-        self.previewUrl = previewUrl #String. Link to a preview
+        self.previewUrl = previewUrl #String
         self.trackNum = trackNum #Integer
-        self.type = type #String. Object type (track)
+        self.type = type #String
         self.uri = uri #String
         self.isLocal = isLocal #Boolean
 
@@ -186,26 +185,26 @@ class SavedTrack:
                  href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal, timestamp):
 
         self.albumId = albumId #String
-        self.artists = artists #List of Artist Names (Strings)
-        self.availableMarkets = availableMarkets #List of Strings. Identifies each country in which the track is available
-        self.discNum = discNum #Integer. On which disc is the track
-        self.durationMs = durationMs #Integer. Track length in ms
-        self.explicit = explicit #Boolean. Is the track explicit or not
-        self.externalIds = externalIds #String Dictionary of Size 2 (External ID Object)
-        self.externalUrls = externalUrls #String Dictionary of Size 2 (External URL Object)
+        self.artists = artists #List<String>
+        self.availableMarkets = availableMarkets #List<String>
+        self.discNum = discNum #Integer
+        self.durationMs = durationMs #Integer
+        self.explicit = explicit #Boolean
+        self.externalIds = externalIds #2-String Dictionary
+        self.externalUrls = externalUrls #2-String Dictionary
         self.href = href #String.
         self.trackId = trackId #String
         self.isPlayable = isPlayable #Boolean
-        self.linkedFrom = linkedFrom #String(?) Same as href???
-        self.restrictions = restrictions #String Dictionary of Size 2. Structure of: {"restrictions" : {"reason" : "market"}}
+        self.linkedFrom = linkedFrom #String
+        self.restrictions = restrictions #3-String Dictionary
         self.name = name #String
         self.popularity = popularity #Integer. Value btwn 0-100
-        self.previewUrl = previewUrl #String. Link to a preview
+        self.previewUrl = previewUrl #String
         self.trackNum = trackNum #Integer
-        self.type = type #String. Object type (track)
+        self.type = type #String
         self.uri = uri #String
         self.isLocal = isLocal #Boolean
-        self.timestamp = timestamp #String. Date and time Track was saved,
+        self.timestamp = timestamp #String
 
 class AudioFeatureObject:
 
