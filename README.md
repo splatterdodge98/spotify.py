@@ -25,7 +25,7 @@ Artist: Corresponds to the Album JSON Object given in the Spotify Web API docume
     
     
 CurrentlyPlayingObject: Corresponds to the CurrentlyPlayingObject JSON Object given in the Spotify Web API documents. Listed below are the object's attributes and their corresponding types:
-    1. context: A ContextObject(? SEND HALP)
+    1. context: 2-String Dictionary. Contains the href, type, and uri for the context of whatever is currently playing. ({'href':'url', 'type':'context', 'uri':'url'})
     2. currentlyPlayingType: String. The object Type of whatever item is currently playing; either "track", "episode", "ad", or "unknown".
     3. isPlaying: Boolean. Returns true if something is playing, false otherwise.
     4. item: String. The currently playing track. Can potentially be None.
@@ -78,13 +78,13 @@ Track: Corresponds to the TrackObject JSON Object given in the Spotify Web API d
     4. discNum: Integer. The disc on which the track is on (usually 1, may be more if an album contains >1 disc).
     5. durationMs: Integer. The langth of the track in milliseconds.
     6. explicit: Boolean. Returns true if the track is known to contain explicit lyrics, false otherwise.
-    7. externalIds: 2-String Dictionary. (? POR FAVOR AYUDAME)
+    7. externalIds: A reference to the ExternalID Object, which contaiins all of the IDs for the associated Track.
     8. externalUrls: 2-String Dictionary. URLs for the track, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
     9. href: String. A URL linking to the Web API's Spotify information about the Track.
     10. trackId: String. The Spotify ID for the Track.
     11. isPlayable: Boolean. Returns true if the Track is playable in the user's current market, false otherwise.
     12. linkedFrom: Sting. A URL linking to another version of the track that was unavailable in the user's current market.
-    13. restrictions: 3-String Dictionary. Contains the restriction for the 'linkedFrom' track and their reasoning for each market. Original Key is the restrictions, inner key is the reason, and value is the market itself. ({"restrictions" : {"reason" : "market"}})
+    13. restrictions: 2-String Dictionary. Contains the restriction for the 'linkedFrom' track and their reasoning for each market. Key is the reason, and value is the market itself. ({"reason" : "market"})
     14. name: String. The name of the Track.
     15. popularity: Integer. A value ranging from 0-100, with a higher value being a higher overall popularity, which is calulated by Spotify.
     16. previewUrl: String. A URL linking to a 30-second preview of the track. Can potentially be None.
@@ -101,13 +101,13 @@ SavedTrack: Corresponds to the TrackObject JSON Object given in the Spotify Web 
     4. discNum: Integer. The disc on which the track is on (usually 1, may be more if an album contains >1 disc).
     5. durationMs: Integer. The langth of the track in milliseconds.
     6. explicit: Boolean. Returns true if the track is known to contain explicit lyrics, false otherwise.
-    7. externalIds: 2-String Dictionary. (? POR FAVOR AYUDAME)
+    7. externalIds: A reference to the ExternalID Object, which contaiins all of the IDs for the associated Track.
     8. externalUrls: 2-String Dictionary. URLs for the track, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
     9. href: String. A URL linking to the Web API's Spotify information about the Track.
     10. trackId: String. The Spotify ID for the Track.
     11. isPlayable: Boolean. Returns true if the Track is playable in the user's current market, false otherwise.
     12. linkedFrom: Sting. A URL linking to another version of the track that was unavailable in the user's current market.
-    13. restrictions: 3-String Dictionary. Contains the restriction for the 'linkedFrom' track and their reasoning for each market. Original Key is the restrictions, inner key is the reason, and value is the market itself. ({"restrictions" : {"reason" : "market"}})
+    13. restrictions: 2-String Dictionary. Contains the restriction for the 'linkedFrom' track and their reasoning for each market. Key is the reason, and value is the market itself. ({"reason" : "market"})
     14. name: String. The name of the Track.
     15. popularity: Integer. A value ranging from 0-100, with a higher value being a higher overall popularity, which is calulated by Spotify.
     16. previewUrl: String. A URL linking to a 30-second preview of the track. Can potentially be None.

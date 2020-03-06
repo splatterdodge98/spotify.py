@@ -74,7 +74,7 @@ class Artist:
 class CurrentlyPlayingObject:
 
     def __init__(self, context, currentlyPlayingType, isPlaying, item, progressMs, timestamp):
-        self.context = context #ContextObject(?)
+        self.context = context #2-String Dictionary
         self.currentlyPlayingType = currentlyPlayingType #String
         self.isPlaying = isPlaying #Boolean
         self.item = item #String
@@ -164,13 +164,13 @@ class Track:
         self.discNum = discNum #Integer
         self.durationMs = durationMs #Integer
         self.explicit = explicit #Boolean
-        self.externalIds = externalIds #2-String Dictionary
+        self.externalIds = externalIds #ExternalID Object
         self.externalUrls = externalUrls #2-String Dictionary
         self.href = href #String
         self.trackId = trackId #String
         self.isPlayable = isPlayable #Boolean
         self.linkedFrom = linkedFrom #String
-        self.restrictions = restrictions #3-String Dictionary
+        self.restrictions = restrictions #2-String Dictionary
         self.name = name #String
         self.popularity = popularity #Integer. Value btwn 0-100
         self.previewUrl = previewUrl #String
@@ -190,7 +190,7 @@ class SavedTrack:
         self.discNum = discNum #Integer
         self.durationMs = durationMs #Integer
         self.explicit = explicit #Boolean
-        self.externalIds = externalIds #2-String Dictionary
+        self.externalIds = externalIds #ExternalID Object
         self.externalUrls = externalUrls #2-String Dictionary
         self.href = href #String.
         self.trackId = trackId #String
