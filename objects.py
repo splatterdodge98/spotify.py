@@ -1,7 +1,6 @@
 class Album:
 
-    def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate,
-                 tracks, URI):
+    def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate, tracks, URI):
         self.albumType = albumType  # String type
         self.artists = artists  # List of Names of the Artists
         self.externalIds = externalIds  # ExternalID Object
@@ -181,8 +180,7 @@ class Track:
 
 class SavedTrack:
     
-    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, 
-                 href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal, timestamp):
+    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal, timestamp):
 
         self.albumId = albumId #String
         self.artists = artists #List<String>
@@ -208,14 +206,14 @@ class SavedTrack:
 
 class AudioFeatureObject:
 
-    def __init__(self, acousticness, analysisUrl, danceability, durationMS, energy, id, instrumentalness, key, liveness, loudness, mode, speechiness, tempo, timeSignature, trackHref, type,
+    def __init__(self, acousticness, analysisUrl, danceability, durationMS, energy, trackId, instrumentalness, key, liveness, loudness, mode, speechiness, tempo, timeSignature, trackHref, type,
                  uri, valence):
         self.acousticness = acousticness #Float
         self.analysisUrl = analysisUrl #string
         self.danceability = danceability #Float
         self.durationMS = durationMS #int
         self.energy = energy #Float
-        self.id =id #String
+        self.trackId = trackId #String
         self.instrumentalness = instrumentalness #float
         self.key = key #int
         self.liveness = liveness #float

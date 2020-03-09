@@ -6,9 +6,16 @@ https://developer.spotify.com/documentation/web-api/reference/
 # Classes:
 
 Album: Corresponds to the Album JSON object given in the Spotify Web API documents, with some types omitted for simplicity's sake. Listed below are the object's attributes and their corresponding types:
-  1. albumType: String. What "type" of album it is, "single", "album", or "compilation".
-  2. artists: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
-  3. 
+    1. albumType: String. What "type" of album it is, "single", "album", or "compilation".
+    2. artists: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
+    3. externalIds: A reference to the ExternalID Object, which contains all of the IDs for the associated Album.
+    4. externalUrls: 2-String Dictionary. URLs for the album, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
+    5. genres: String Array. Each string is a genre that the album is associated with.
+    6. List<String>. Each string is a URL to an image associated with the album.
+    7. name: String. The name of the album.
+    8. releaseDate: DateTime. CThe Date and Time an album was released, with a structure of: (YYYY-MM-DD HH:MM:SS.SSZ)
+    9. tracks: 2-String Dictionary. Contains all of the tracks associated with the dictionary, with their name being the key, and id being the value. Show here iis the structure: ({name:id})
+    10. URI: String. The Spotify URI for the Album.
   
   
 Artist: Corresponds to the Album JSON Object given in the Spotify Web API documents, as well as the simplified version. Listed below are the object's attributes and their corresponding types:
@@ -78,7 +85,7 @@ Track: Corresponds to the TrackObject JSON Object given in the Spotify Web API d
     4. discNum: Integer. The disc on which the track is on (usually 1, may be more if an album contains >1 disc).
     5. durationMs: Integer. The langth of the track in milliseconds.
     6. explicit: Boolean. Returns true if the track is known to contain explicit lyrics, false otherwise.
-    7. externalIds: A reference to the ExternalID Object, which contaiins all of the IDs for the associated Track.
+    7. externalIds: A reference to the ExternalID Object, which contains all of the IDs for the associated Track.
     8. externalUrls: 2-String Dictionary. URLs for the track, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
     9. href: String. A URL linking to the Web API's Spotify information about the Track.
     10. trackId: String. The Spotify ID for the Track.
@@ -101,7 +108,7 @@ SavedTrack: Corresponds to the TrackObject JSON Object given in the Spotify Web 
     4. discNum: Integer. The disc on which the track is on (usually 1, may be more if an album contains >1 disc).
     5. durationMs: Integer. The langth of the track in milliseconds.
     6. explicit: Boolean. Returns true if the track is known to contain explicit lyrics, false otherwise.
-    7. externalIds: A reference to the ExternalID Object, which contaiins all of the IDs for the associated Track.
+    7. externalIds: A reference to the ExternalID Object, which contains all of the IDs for the associated Track.
     8. externalUrls: 2-String Dictionary. URLs for the track, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
     9. href: String. A URL linking to the Web API's Spotify information about the Track.
     10. trackId: String. The Spotify ID for the Track.
@@ -115,4 +122,24 @@ SavedTrack: Corresponds to the TrackObject JSON Object given in the Spotify Web 
     18. type: String. The JSON Object tpe, which should always return "track".
     19. uri: String. The Spotify URI for the Track.
     20. isLocal: Boolean. Returns true if the track is from a local file, false otherwise.
-    21. timestamp: String. The date and time at which the track was saved, in ISO 8601 format, ie: (YYYY-MM-DDTHH:MM:SSZ). May be imprecise.
+    21. timestamp: DateTime. The date and time at which the track was saved, in ISO 8601 format, ie: (YYYY-MM-DDTHH:MM:SSZ). May be imprecise.
+    
+AudioFeatureObject: orresponds to the Audio Features JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. acousticness: Float. A value from 0.0 to 1.0, measuring how acoustic the track is. A higher value means it is more likely acoustic.
+    2. analysisUrl: String. A URL with access to the full audio analysis of the track. An access token is required to be able to use this.
+    3. danceability: Float. A value from 0.0 to 1.0, measuring how danceable the track is. A higher value means the track is more danceable.
+    4. durationMS: Integer. The duration of the track in milliseconds.
+    5. energy: Float. A value from 0.0 to 1.0 that measures the intesity of the track. A higher value means the track is mroe intense.
+    6. trackId: String. The Spotify ID for the Track.
+    7. instrumentalness: Float. A value from 0.0 to 1.0 to predict whether the track contains vocals or not. A value of 0.5 or higher is intended to represent instrumental tracks, with higher values meaning fewer vocals.
+    8. key: Integer. The music key that the Track is in, using standard Ptch Class Notation. (EG: C = 0, C# = 1, D = 2, etc.)
+    9. liveness: Float. A value from 0.0 to 1.0 that measures the chance that there is an audience in the track. A higher value means there is a greater chance, with values at or above 0.8 meaning there is an almost certain chance there is an audience (and the track is being performed live).
+    10. loudness: Float. The overall loudness of the track in decibels. Values typically range between -60 and 0 db.
+    11. mode: Integer. Determines whether a track is in a Major Key or Minor Key. 1 is Major, 0 is Minor.
+    12. speechiness: Float. A value between 0.0 and 1.0 that determines how much normal speech is in the track. Values below 0.33 likely have almost no spoken lines, values between 0.33 and 0.66 may be more of a mix of the two (see: rap), and values above 0.66 likely contain only spoken words. A higher value means there are more spoken words and fewer sung words.
+    13. tempo: Float. The overall estimated tempo of the track in Beats per Minute (BPM). A higher values means an overall faster track.
+    14. timeSignature: Integer. An overall estimated value of the track's time signature. The time signature is a convention used to determine how many beats are in a single measure (bar).
+    15. trackHref: String. A link to the Web API endpoint for the full details of the Track.
+    16. type: String. The JSOn Object Type, which should always return "audio_features".
+    17. uri: String. The Spotify URi for the Track.
+    18. valence: Float. A value between 0.0 and 1.0 describing the overall positiveness of the track. A higher value means that the track feels more positive overall.
