@@ -124,7 +124,7 @@ SavedTrack: Corresponds to the TrackObject JSON Object given in the Spotify Web 
     20. isLocal: Boolean. Returns true if the track is from a local file, false otherwise.
     21. timestamp: DateTime. The date and time at which the track was saved, in ISO 8601 format, ie: (YYYY-MM-DDTHH:MM:SSZ). May be imprecise.
     
-AudioFeatureObject: orresponds to the Audio Features JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+AudioFeatureObject: Corresponds to the Audio Features JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
     1. acousticness: Float. A value from 0.0 to 1.0, measuring how acoustic the track is. A higher value means it is more likely acoustic.
     2. analysisUrl: String. A URL with access to the full audio analysis of the track. An access token is required to be able to use this.
     3. danceability: Float. A value from 0.0 to 1.0, measuring how danceable the track is. A higher value means the track is more danceable.
@@ -143,3 +143,12 @@ AudioFeatureObject: orresponds to the Audio Features JSON Object given in the Sp
     16. type: String. The JSOn Object Type, which should always return "audio_features".
     17. uri: String. The Spotify URi for the Track.
     18. valence: Float. A value between 0.0 and 1.0 describing the overall positiveness of the track. A higher value means that the track feels more positive overall.
+    
+PagingObject: Corresponds to the Paging JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. href: String. A URL linking to the Spotify Web API's information about the item within the Paging Object.
+    2. items: ??? I BLAME YOU FOR THIS NOAH
+    3. limit: Integer. The maximum number of items within the response. Either set by the query or the default value (which is not known atm).
+    4. nextItem: String. A URL to the next page of items. Can potentially be None if there are no more items left.
+    5. offset: Integer. The offset of the items returned. Either set by the query or the default value (which is not knwon atm).
+    6. previousItem: String. A URL to the previous page of items. Can potentially be None if the item is the first one in the list.
+    7. total: Integer. The total number of items available to return. (Isn't this redundant with limit, or it is something else? Send Halp.)

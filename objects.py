@@ -229,13 +229,13 @@ class AudioFeatureObject:
 
 class PagingObject:
 
-    def __init__(self, href, items, limit, next, offset, previous, total):
+    def __init__(self, href, items, limit, nextItem, offset, previousItem, total):
         self.href = href #string
-        self.items = items #this is gonna be a conversation tomorrow lol
+        self.items = items #this is gonna be a conversation tomorrow lol (???)
         self.limit = limit #int
-        self.next = next #string
+        self.nextItem = nextItem #string
         self.offset = offset #int
-        self.previous = previous #String
+        self.previousItem = previousItem #String
         self.total = total #int
 
 class PlayHistoryObject:
