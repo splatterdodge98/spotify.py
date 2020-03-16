@@ -241,7 +241,7 @@ class PagingObject:
 class PlayHistoryObject:
 
     def __init__(self, context, playedAt, track):
-        self.context = context #context object
+        self.context = context #context object (?)
         self.playedAt = playedAt #DateTime
         self.track = track #Dictionary containing {name:id} structure
 
@@ -249,7 +249,7 @@ class PlaylistTrackObject:
 
     def __init__(self, addedAt, addedBy, isLocal, track):
         self.addedAt = addedAt #DateTime
-        self.addedBy = addedBy #Public User Object
+        self.addedBy = addedBy #Public User Object (?)
         self.isLocal = isLocal
         self.track = track #dictionary containing {name:id} structure
 

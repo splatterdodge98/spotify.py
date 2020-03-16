@@ -13,8 +13,8 @@ Album: Corresponds to the Album JSON object given in the Spotify Web API documen
     5. genres: String Array. Each string is a genre that the album is associated with.
     6. List<String>. Each string is a URL to an image associated with the album.
     7. name: String. The name of the album.
-    8. releaseDate: DateTime. CThe Date and Time an album was released, with a structure of: (YYYY-MM-DD HH:MM:SS.SSZ)
-    9. tracks: 2-String Dictionary. Contains all of the tracks associated with the dictionary, with their name being the key, and id being the value. Show here iis the structure: ({name:id})
+    8. releaseDate: DateTime. The Date and Time an album was released, with a structure of: (YYYY-MM-DD HH:MM:SS.SSZ)
+    9. tracks: 2-String Dictionary. Contains all of the tracks associated with the dictionary, with their name being the key, and id being the value. Show here is the structure: ({name:id})
     10. URI: String. The Spotify URI for the Album.
   
   
@@ -152,3 +152,34 @@ PagingObject: Corresponds to the Paging JSON Object given in the Spotify Web API
     5. offset: Integer. The offset of the items returned. Either set by the query or the default value (which is not knwon atm).
     6. previousItem: String. A URL to the previous page of items. Can potentially be None if the item is the first one in the list.
     7. total: Integer. The total number of items available to return. (Isn't this redundant with limit, or it is something else? Send Halp.)
+
+PlayHistoryObject: Corresponds to the Play History JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. context: ContextObject. The context in which the track was played from (?)
+    2. playedAt: DateTime. The date and time at which the track began to play, with a structure of: (YYYY-MM-DD HH:MM:SS.SSZ).
+    3. track: 2-String Dictionary. Contains all of the tracks associated with the play history, with their name being the key, and id being the value. Show here is the structure: ({name:id}).
+
+PlaylistTrackObject: Corresponds to the Playlist TrackJSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. addedAt: DateTime. The date and time at which the track was added to the playlist, with a structure of: (YYYY-MM-DD HH:MM:SS.SSZ). May be null if the track/playlist was extremely old.
+    2. addedBy: PublicUserObject. (???)
+    3. isLocal: Boolean. Returns true if the track is from a local file, false otherwise.
+    4. track: 2-String Dictionary. Contains the track associated with the Playlist Track, with their name being the key, and id being the value. Show here is the structure: ({name:id}). Is only a single track.
+
+RecommendationsResponseObject: Corresponds to the Recommendations Response JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. seeds: List<String>. A list of the ids of all of the recommendation seeds.
+    2. tracks: 2-String Dictionary. Contains all of the tracks associated with the recommendation seeds, with their name being the key, and id being the value. Show here is the structure: ({name:id}).
+
+TunableTrackObject: Corresponds to the Tunable Track JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. acousticness: Float. A value from 0.0 to 1.0, measuring how acoustic the track is. A higher value means it is more likely acoustic.
+    2. danceability: Float. A value from 0.0 to 1.0, measuring how danceable the track is. A higher value means the track is more danceable.
+    3. durationMS: Integer. The duration of the track in milliseconds.
+    4. energy: Float. A value from 0.0 to 1.0 that measures the intesity of the track. A higher value means the track is mroe intense.
+    5. instrumentalness: Float. A value from 0.0 to 1.0 to predict whether the track contains vocals or not. A value of 0.5 or higher is intended to represent instrumental tracks, with higher values meaning fewer vocals.
+    6. key: Integer. The music key that the Track is in, using standard Ptch Class Notation. (EG: C = 0, C# = 1, D = 2, etc.)
+    7. liveness: Float. A value from 0.0 to 1.0 that measures the chance that there is an audience in the track. A higher value means there is a greater chance, with values at or above 0.8 meaning there is an almost certain chance there is an audience (and the track is being performed live).
+    8. loudness: Float. The overall loudness of the track in decibels. Values typically range between -60 and 0 db.
+    9. mode: Integer. Determines whether a track is in a Major Key or Minor Key. 1 is Major, 0 is Minor.
+    10. popularity: Integer. A value ranging from 0-100, with a higher value being a higher overall popularity, which is calulated by Spotify.
+    11. speechiness: Float. A value between 0.0 and 1.0 that determines how much normal speech is in the track. Values below 0.33 likely have almost no spoken lines, values between 0.33 and 0.66 may be more of a mix of the two (see: rap), and values above 0.66 likely contain only spoken words. A higher value means there are more spoken words and fewer sung words.
+    12. tempo: Float. The overall estimated tempo of the track in Beats per Minute (BPM). A higher values means an overall faster track.
+    13. timeSignature: Integer. An overall estimated value of the track's time signature. The time signature is a convention used to determine how many beats are in a single measure (bar).
+    4. valence: Float. A value between 0.0 and 1.0 describing the overall positiveness of the track. A higher value means that the track feels more positive overall.
