@@ -2,9 +2,9 @@ class Album:
 
     def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate, tracks, URI):
         self.albumType = albumType  # String type
-        self.artists = artists  # List of Names of the Artists
-        self.externalIds = externalIds  # ExternalID Object
-        self.externalUrls = externalUrls  # ExternalURLS Object
+        self.artists = artists  # Dictionary name:id pair
+        self.externalIds = externalIds  # Dictionary
+        self.externalUrls = externalUrls  # dictionary of spotify url
         self.genres = genres  # list of strings
         self.albumId = albumId  # String
         self.images = images  # Url for the image
@@ -276,4 +276,3 @@ class TuneableTrackObject:
         self.tempo = tempo #float
         self.timeSignature = timeSignature #int
         self.valence = valence #float
-
