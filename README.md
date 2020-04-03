@@ -30,6 +30,12 @@ Artist: Corresponds to the Album JSON Object given in the Spotify Web API docume
     9. type: String. The JSON Object type, which should always return "artist".
     10. userUri: String. The Spotify URI for the Artist.
     
+    Category: Corresponds to the Album JSON object given in the Spotify Web API documents, with some types omitted for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+1. href: String. What "type" of album it is, "single", "album", or "compilation".
+2. icons: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
+3. id: A reference to the ExternalID Object, which contains all of the IDs for the associated Album.
+4. name: 2-String Dictionary. URLs for the album, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
+  
     
 CurrentlyPlayingObject: Corresponds to the CurrentlyPlayingObject JSON Object given in the Spotify Web API documents. Listed below are the object's attributes and their corresponding types:
     1. context: 2-String Dictionary. Contains the href, type, and uri for the context of whatever is currently playing. ({'href':'url', 'type':'context', 'uri':'url'})
@@ -49,6 +55,11 @@ DeviceObject: Corresponds to the DeviceObject JSON Object given in the Spotify W
     6. type: String. The type of the device, eg: "Computer", "Smartphone", "Speaker", etc.
     7. volumePercent: Integer. The current volume, in a percentage (eg: 75 = 75%). Can potentially be None.
     
+External ID: Corresponds to the Album JSON object given in the Spotify Web API documents, with some types omitted for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+1. ean: String. What "type" of album it is, "single", "album", or "compilation".
+2. isrc: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
+3. upc:
+
     
 PlaylistObject: Corresponds to the Playlist JSON Object given in the Spotify Web API documents, as well as the simplified version. Listed below are the object's attributes and their corresponding types:
     1. collaborative: Boolean. Returns true if the owner allows other users to modify the Playlist, false otherwise.
@@ -167,6 +178,22 @@ PlaylistTrackObject: Corresponds to the Playlist TrackJSON Object given in the S
 RecommendationsResponseObject: Corresponds to the Recommendations Response JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
     1. seeds: List<String>. A list of the ids of all of the recommendation seeds.
     2. tracks: 2-String Dictionary. Contains all of the tracks associated with the recommendation seeds, with their name being the key, and id being the value. Show here is the structure: ({name:id}).
+    
+Saved Album: Corresponds to the Album JSON object given in the Spotify Web API documents, with some types omitted for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+1. albumType: String. What "type" of album it is, "single", "album", or "compilation".
+2. artists: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
+3. 
+1. albumType: String. What "type" of album it is, "single", "album", or "compilation".
+2. artists: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
+3. externalIds: A reference to the ExternalID Object, which contains all of the IDs for the associated Album.
+4. externalUrls: 2-String Dictionary. URLs for the album, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
+5. genres: String Array. Each string is a genre that the album is associated with.
+6. List<String>. Each string is a URL to an image associated with the album.
+7. name: String. The name of the album.
+8. releaseDate: DateTime. CThe Date and Time an album was released, with a structure of: (YYYY-MM-DD HH:MM:SS.SSZ)
+9. tracks: 2-String Dictionary. Contains all of the tracks associated with the dictionary, with their name being the key, and id being the value. Show here iis the structure: ({name:id})
+10. URI: String. The Spotify URI for the Album.
+
 
 TunableTrackObject: Corresponds to the Tunable Track JSON Object given in the Spotify Web API documents, with some types modified for simplicity's sake. Listed below are the object's attributes and their corresponding types:
     1. acousticness: Float. A value from 0.0 to 1.0, measuring how acoustic the track is. A higher value means it is more likely acoustic.
@@ -183,3 +210,4 @@ TunableTrackObject: Corresponds to the Tunable Track JSON Object given in the Sp
     12. tempo: Float. The overall estimated tempo of the track in Beats per Minute (BPM). A higher values means an overall faster track.
     13. timeSignature: Integer. An overall estimated value of the track's time signature. The time signature is a convention used to determine how many beats are in a single measure (bar).
     4. valence: Float. A value between 0.0 and 1.0 describing the overall positiveness of the track. A higher value means that the track feels more positive overall.
+    
