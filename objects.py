@@ -156,7 +156,7 @@ class ExternalId:
         
 class Track:
     
-    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, href, trackId, isPlayable, linkedFrom, restrictions, name, popularity, previewUrl, trackNum, type, uri, isLocal):
+    def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, href, trackId, name, popularity, previewUrl, trackNum, type, uri, isLocal):
         self.albumId = albumId #String
         self.artists = artists #List<String>
         self.availableMarkets = availableMarkets #List<String>
@@ -167,9 +167,6 @@ class Track:
         self.externalUrls = externalUrls #2-String Dictionary
         self.href = href #String
         self.trackId = trackId #String
-        self.isPlayable = isPlayable #Boolean
-        self.linkedFrom = linkedFrom #String
-        self.restrictions = restrictions #2-String Dictionary
         self.name = name #String
         self.popularity = popularity #Integer. Value btwn 0-100
         self.previewUrl = previewUrl #String

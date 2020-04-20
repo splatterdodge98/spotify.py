@@ -1,6 +1,10 @@
 import requests
 import objects
 
+##############
+# Album  API #
+##############
+
 def getAlbum(refresh_token, client_id, client_secret, id):
     new_access_token = requests.post('https://accounts.spotify.com/api/token', data = {'grant_type':'refresh_token', 'refresh_token':refresh_token, 'client_id':client_id, 'client_secret':client_secret})
     access_token = new_access_token.json()['access_token']
@@ -53,3 +57,59 @@ def getManyArtists(refresh_token, client_id, client_secret, list_of_ids):
         returned_list[name] = actual_ids[id_loc]
         id_loc += 1
     return returned_list
+
+##############
+# Track  API #
+##############
+
+def getManyTracks(refresh_token, client_id, client_secret, list_of_ids):
+    new_access_token = requests.post('https://accounts.spotify.com/api/token',
+                                     data={'grant_type': 'refresh_token', 'refresh_token': refresh_token,
+                                           'client_id': client_id, 'client_secret': client_secret})
+    access_token = new_access_token.json()['access_token']
+    tracksTempCall = requests.get('https://api.spotify.com/v1/tracks/',
+                              headers={'Authorization': 'Bearer ' + access_token},
+                              params={'ids': list_of_ids})
+    tracksTemp = tracksTempCall.json()
+    tracks = []
+    for i in tracksTemp['tracks']:
+        all_artists = []
+        available_markets = i['available_markets']
+        for j in i['artists']:
+            all_artists.append([j['name']])
+        tracks.append(objects.Track(i['album']['id'], all_artists, available_markets, i['disc_number'], i['duration_ms'], i['explicit'], i['external_ids'], i['external_urls'], i['href'], i['id'], i['name'], i['popularity'],
+                                    i['preview_url'], i['track_number'], i['type'], i['uri'], i['is_local']))
+    return tracks
+
+def getAudioAnalysisForTrack(refresh_token, client_id, client_secret, trackId):
+    new_access_token = requests.post('https://accounts.spotify.com/api/token',
+                                     data={'grant_type': 'refresh_token', 'refresh_token': refresh_token,
+                                           'client_id': client_id, 'client_secret': client_secret})
+    access_token = new_access_token.json()['access_token']
+    tempCall = requests.get('https://api.spotify.com/v1/audio-analysis/%s' % trackId, headers={'Authorization': 'Bearer ' + access_token})
+    return tempCall.json()
+
+def getAudioFeaturesForTrack(refresh_token, client_id, client_secret, trackId):
+    new_access_token = requests.post('https://accounts.spotify.com/api/token',
+                                     data={'grant_type': 'refresh_token', 'refresh_token': refresh_token,
+                                           'client_id': client_id, 'client_secret': client_secret})
+    access_token = new_access_token.json()['access_token']
+    tempCall = requests.get('https://api.spotify.com/v1/audio-features/%s' % trackId, headers={'Authorization': 'Bearer ' + access_token})
+    AudioFeaturestemp = tempCall.json()
+    return objects.AudioFeatureObject(AudioFeaturestemp['acousticness'], AudioFeaturestemp['analysis_url'], AudioFeaturestemp['danceability'], AudioFeaturestemp['duration_ms'], AudioFeaturestemp['energy'], AudioFeaturestemp['id'],
+                                      AudioFeaturestemp['instrumentalness'], AudioFeaturestemp['key'], AudioFeaturestemp['liveness'], AudioFeaturestemp['loudness'], AudioFeaturestemp['mode'], AudioFeaturestemp['speechiness'],
+                                      AudioFeaturestemp['tempo'], AudioFeaturestemp['time_signature'], AudioFeaturestemp['track_href'], AudioFeaturestemp['type'], AudioFeaturestemp['uri'], AudioFeaturestemp['valence'])
+
+def getTrack(refresh_token, client_id, client_secret, trackId):
+    new_access_token = requests.post('https://accounts.spotify.com/api/token',
+                                     data={'grant_type': 'refresh_token', 'refresh_token': refresh_token,
+                                           'client_id': client_id, 'client_secret': client_secret})
+    access_token = new_access_token.json()['access_token']
+    tempCall = requests.get('https://api.spotify.com/v1/tracks/%s' % trackId, headers={'Authorization': 'Bearer ' + access_token})
+    trackTemp = tempCall.json()
+    available_markets = trackTemp['available_markets']
+    all_artists = []
+    for i in trackTemp['artists']:
+        all_artists.append([i['name']])
+    return objects.Track(trackTemp['album']['id'], all_artists, available_markets, trackTemp['disc_number'], trackTemp['duration_ms'], trackTemp['explicit'], trackTemp['external_ids'], trackTemp['external_urls'], trackTemp['href'],
+                         trackTemp['id'], trackTemp['name'], trackTemp['popularity'], trackTemp['preview_url'], trackTemp['track_number'], trackTemp['type'], trackTemp['uri'], trackTemp['is_local'])
