@@ -7,9 +7,9 @@ class Album:
         self.externalUrls = externalUrls  # dictionary of spotify url
         self.genres = genres  # list of strings
         self.albumId = albumId  # String
-        self.images = images  # Url for the image
+        self.images = images  #List of image urls
         self.name = name  # String
-        self.releaseDate = releaseDate  # String that we'll convert to DateTime
+        self.releaseDate = releaseDate  # String
         self.tracks = tracks  # Dictionary with {name:id} structure
         self.URI = URI  # string
 
