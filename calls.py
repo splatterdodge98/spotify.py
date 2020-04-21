@@ -106,9 +106,21 @@ def getArtistsTopTracks(refresh_token, client_id, client_secret, artist_id, coun
         track_list.append(temp_track)
     return track_list
 
-def getArtistsSimilarArtists(refresh_token, client_id, client_secret):
+def getArtistRelatedArtists(refresh_token, client_id, client_secret, artist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    return 0
+    starting_list = requests.get("https://api.spotify.com/v1/artists/%s/related-artists" % artist_id,
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    real_list = starting_list.json()
+    list_of_artists = []
+    for artist in real_list["artists"]:
+        list_of_images = []
+        for images in artist["images"]:
+            list_of_images.append(images["url"])
+        temp_artist = objects.Artist(artist["external_urls"], artist["followers"]["total"], artist["genres"],
+                                    artist["href"], artist["id"], list_of_images, artist["name"], artist["popularity"],
+                                    artist["type"], artist["uri"])
+        list_of_artists.append(temp_artist)
+    return list_of_artists
 
 ##############
 # Track  API #
