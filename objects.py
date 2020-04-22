@@ -49,10 +49,10 @@ class PublicUserObject:
     def __init__(self, displayName, externalUrls, followers, href, userPublicObjectId, userProfileImages, userType, userUri):
         self.displayName = displayName # (String)	The name displayed on the user’s profile. null if not available.
         self.extrnalUrls = externalUrls # (external URL Object) Known public external URLs for this user
-        self.followers = followers # (a followers object) Information about the followers of this user
+        self.followers = followers # Int. Number of followers this user has.
         self.href = href # (String) 	A link to the Web API endpoint for this user.
         self.userPublicObjectId = userPublicObjectId # (String) The Spotify user ID for this user.
-        self.userPublicProfileImages = userProfileImages #(Array of image objects) The users profile image
+        self.userPublicProfileImages = userProfileImages #(List of image urls) The users profile image
         self.userType = userType #(string) The object type "user"
         self.userUri = userUri #(String) The Spotify URI for this user
 
@@ -114,6 +114,7 @@ class PrivateUserObject:
         self.displayName = displayName #String
         self.email = email #String
         self.externalUrls = externalUrls #2-String Dictionary
+        self.followers = followers #Int
         self.href = href #Striing
         self.userId = userId #String
         self.images = images #List<String>

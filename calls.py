@@ -122,6 +122,37 @@ def getArtistRelatedArtists(refresh_token, client_id, client_secret, artist_id):
         list_of_artists.append(temp_artist)
     return list_of_artists
 
+####################
+# User Profile API #
+####################
+
+def getOtherUsersProfile(refresh_token, client_id, client_secret, user_id):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("https://api.spotify.com/v1/users/%s" % user_id,
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    real_info = starting_info.json()
+    list_of_images = []
+    for image in real_info['images']:
+        list_of_images.append(image['url'])
+    user_info = objects.PublicUserObject(real_info['display_name'], real_info['external_urls'],
+                                         real_info['followers']['total'], real_info['href'], real_info['id'],
+                                         list_of_images, real_info['type'], real_info['uri'])
+    return user_info
+
+def getCurrentUsersProfile(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("https://api.spotify.com/v1/me",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    real_info = starting_info.json()
+    list_of_images = []
+    for image in real_info['images']:
+        list_of_images.append(image['url'])
+    user_info = objects.PrivateUserObject(real_info['country'], real_info['display_name'], real_info['email'],
+                                          real_info['external_urls'], real_info['followers']['total'],
+                                          real_info['href'], real_info['id'], list_of_images, real_info['product'],
+                                          real_info['type'], real_info['uri'])
+    return user_info
+
 ##############
 # Track  API #
 ##############
