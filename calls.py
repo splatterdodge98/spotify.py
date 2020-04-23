@@ -1,6 +1,7 @@
 import requests
 import objects
 
+
 ###########################
 # Getting an Access Token # Note: You break this, and you break every other last function here.
 ########################### Plz Do Not Touch
@@ -12,28 +13,105 @@ def getAccessToken(refresh_token, client_id, client_secret):
     access_token = new_access_token.json()['access_token']
     return access_token
 
+
 ##############
 # Album  API #
 ##############
 
-def getAlbum(refresh_token, client_id, client_secret, id):
+def getAnAlbum(refresh_token, client_id, client_secret, albumId):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    album_temp = requests.get("https://api.spotify.com/v1/albums/%s" % id,
-                              headers = {'Authorization': 'Bearer ' + access_token})
+    album_temp = requests.get("https://api.spotify.com/v1/albums/%s" % albumId,
+                              headers={'Authorization': 'Bearer ' + access_token})
     album = album_temp.json()
     list_of_artists = {}
-    list_of_tracks = {}
+    holdingTracks = []
     list_of_images = []
     for artist in album["artists"]:
-        list_of_artists[artist["name"]]: artist['id']
-    for tracks in album['tracks']['items']:
-        list_of_tracks[tracks['name']]: tracks['id']
+        list_of_artists[artist["name"]] = artist['id']
+    for i in album['tracks']['items']:
+        holdingArtists = {}
+        for j in i['artists']:
+            holdingArtists[j['name']] = j['id']
+        holdingTracks.append(
+            objects.Track(i['id'], holdingArtists, i['available_markets'], i['disc_number'], i['duration_ms'],
+                          i['explicit'], None, i['external_urls'], i['href'], i['id'], i['name'], None,
+                          i['preview_url'],
+                          i['track_number'], i['type'], i['uri'], None))
+    list_of_tracks = objects.PagingObject(album['tracks']['href'], holdingTracks, album['tracks']['limit'],
+                                          album['tracks']['next'], album['tracks']['offset'],
+                                          album['tracks']['previous'], album['tracks']['total'])
     for images in album['images']:
         list_of_images.append(images['url'])
     return_obj = objects.Album(album["album_type"], list_of_artists, album['external_ids'], album['external_urls'],
                                album['genres'], album['id'], list_of_images, album['name'], album['release_date'],
                                list_of_tracks, album['uri'])
     return return_obj
+
+
+def getMultipleAlbums(refresh_token, client_id, client_secret, albumIds):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.get('https://api.spotify.com/v1/albums',
+                            headers={'Authorization': 'Bearer ' + access_token},
+                            params={'ids': albumIds})
+    tempAlbums = tempCall.json()
+    albumsToReturn = []
+    for i in tempAlbums['albums']:
+        list_of_artists = {}
+        holdingTracks = []
+        list_of_images = []
+        for artist in i["artists"]:
+            list_of_artists[artist["name"]] = artist['id']
+        for j in i['tracks']['items']:
+            holdingArtists = {}
+            for k in j['artists']:
+                holdingArtists[k['name']] = k['id']
+            holdingTracks.append(
+                objects.Track(j['id'], holdingArtists, j['available_markets'], j['disc_number'], j['duration_ms'],
+                              j['explicit'], None, j['external_urls'], j['href'], j['id'], j['name'], None,
+                              j['preview_url'],
+                              j['track_number'], j['type'], j['uri'], None))
+        list_of_tracks = objects.PagingObject(i['tracks']['href'], holdingTracks, i['tracks']['limit'],
+                                              i['tracks']['next'], i['tracks']['offset'],
+                                              i['tracks']['previous'], i['tracks']['total'])
+        for images in i['images']:
+            list_of_images.append(images['url'])
+        albumsToReturn.append(objects.Album(i["album_type"], list_of_artists, i['external_ids'], i['external_urls'],
+                                            i['genres'], i['id'], list_of_images, i['name'], i['release_date'],
+                                            list_of_tracks, i['uri']))
+    return albumsToReturn
+
+
+def getAnAlbumsTracks(refresh_token, client_id, client_secret, albumId):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.get('https://api.spotify.com/v1/albums/%s/tracks' % albumId,
+                            headers={'Authorization': 'Bearer ' + access_token})
+    tempTracks = tempCall.json()
+    holdingTracks = []
+    for i in tempTracks['items']:
+        holdingArtists = {}
+        for j in i['artists']:
+            holdingArtists[j['name']] = j['id']
+        holdingTracks.append(
+            objects.Track(i['id'], holdingArtists, i['available_markets'], i['disc_number'], i['duration_ms'],
+                          i['explicit'], None, j['external_urls'], i['href'], i['id'], i['name'], None,
+                          i['preview_url'],
+                          i['track_number'], i['type'], i['uri'], None))
+    return objects.PagingObject(tempTracks['href'], holdingTracks, tempTracks['limit'],
+                                tempTracks['next'], tempTracks['offset'],
+                                tempTracks['previous'], tempTracks['total'])
+
+
+################
+# Playlist API #
+################
+
+def replaceAPlaylistsItems(refresh_token, client_id, client_secret, uris, playlistId):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.put('https://api.spotify.com/v1/playlists/%s/tracks' % playlistId,
+                            headers={'Authorization': 'Bearer ' + access_token, 'Content-Type': 'application/json'},
+                            data={'uris': uris})
+    return tempCall.reason
+
 
 ##############
 # Artist API #
@@ -42,7 +120,7 @@ def getAlbum(refresh_token, client_id, client_secret, id):
 def getArtist(refresh_token, client_id, client_secret, artist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     artist_temp = requests.get("https://api.spotify.com/v1/artists/%s" % artist_id,
-                              headers={'Authorization': 'Bearer ' + access_token})
+                               headers={'Authorization': 'Bearer ' + access_token})
     artist = artist_temp.json()
     list_of_images = []
     for images in artist["images"]:
@@ -52,10 +130,11 @@ def getArtist(refresh_token, client_id, client_secret, artist_id):
                                 artist["type"], artist["uri"])
     return return_obj
 
+
 def getManyArtists(refresh_token, client_id, client_secret, list_of_ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_list = requests.get("https://api.spotify.com/v1/artists",
-                              headers={'Authorization': 'Bearer ' + access_token}, params={'ids': list_of_ids})
+                                 headers={'Authorization': 'Bearer ' + access_token}, params={'ids': list_of_ids})
     real_list = starting_list.json()
     returned_list = []
     for artist in real_list["artists"]:
@@ -67,6 +146,7 @@ def getManyArtists(refresh_token, client_id, client_secret, list_of_ids):
                                     artist["type"], artist["uri"])
         returned_list.append(return_obj)
     return returned_list
+
 
 def getArtistsAlbums(refresh_token, client_id, client_secret, artist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -85,6 +165,7 @@ def getArtistsAlbums(refresh_token, client_id, client_secret, artist_id):
                                    list_of_images, album['name'], album['release_date'], {}, album['uri'])
         album_list.append(temp_album)
     return album_list
+
 
 def getArtistsTopTracks(refresh_token, client_id, client_secret, artist_id, country):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -105,6 +186,7 @@ def getArtistsTopTracks(refresh_token, client_id, client_secret, artist_id, coun
         track_list.append(temp_track)
     return track_list
 
+
 def getArtistRelatedArtists(refresh_token, client_id, client_secret, artist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_list = requests.get("https://api.spotify.com/v1/artists/%s/related-artists" % artist_id,
@@ -116,10 +198,11 @@ def getArtistRelatedArtists(refresh_token, client_id, client_secret, artist_id):
         for images in artist["images"]:
             list_of_images.append(images["url"])
         temp_artist = objects.Artist(artist["external_urls"], artist["followers"]["total"], artist["genres"],
-                                    artist["href"], artist["id"], list_of_images, artist["name"], artist["popularity"],
-                                    artist["type"], artist["uri"])
+                                     artist["href"], artist["id"], list_of_images, artist["name"], artist["popularity"],
+                                     artist["type"], artist["uri"])
         list_of_artists.append(temp_artist)
     return list_of_artists
+
 
 ####################
 # User Profile API #
@@ -138,6 +221,7 @@ def getOtherUsersProfile(refresh_token, client_id, client_secret, user_id):
                                          list_of_images, real_info['type'], real_info['uri'])
     return user_info
 
+
 def getCurrentUsersProfile(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("https://api.spotify.com/v1/me",
@@ -151,6 +235,7 @@ def getCurrentUsersProfile(refresh_token, client_id, client_secret):
                                           real_info['href'], real_info['id'], list_of_images, real_info['product'],
                                           real_info['type'], real_info['uri'])
     return user_info
+
 
 ###############
 # Browse  API #
@@ -176,6 +261,7 @@ def getManyCategories(refresh_token, client_id, client_secret, num=20, start=0):
         temp_category = objects.Category(category['href'], icon_list, category['id'], category['name'])
         category_list.append(temp_category)
     return category_list
+
 
 def getACategory(refresh_token, client_id, client_secret, category_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -238,6 +324,7 @@ def getRecommendations(refresh_token, client_id, client_secret, input_artists, i
     recommends_response = objects.RecommendationsResponseObject(seed_list, track_list)
     return recommends_response
 
+
 def getRecommendationGenres(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("https://api.spotify.com/v1/recommendations/available-genre-seeds",
@@ -246,6 +333,7 @@ def getRecommendationGenres(refresh_token, client_id, client_secret):
     return_list = info['genres']
     return return_list
 
+
 def getAllNewReleases(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("",
@@ -253,12 +341,14 @@ def getAllNewReleases(refresh_token, client_id, client_secret):
     info = starting_info.json()
     return 0
 
+
 def getAllFeaturedPlaylists(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("",
                                  headers={'Authorization': 'Bearer ' + access_token})
     info = starting_info.json()
     return 0
+
 
 ###############
 # Follow  API #
@@ -271,12 +361,14 @@ def getFollowingState(refresh_token, client_id, client_secret):
     info = starting_info.json()
     return 0
 
+
 def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("",
                                  headers={'Authorization': 'Bearer ' + access_token})
     info = starting_info.json()
     return 0
+
 
 def followAnArtistOrUser(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -285,12 +377,14 @@ def followAnArtistOrUser(refresh_token, client_id, client_secret):
     info = starting_info.json()
     return 0
 
+
 def followAPlaylist(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("",
                                  headers={'Authorization': 'Bearer ' + access_token})
     info = starting_info.json()
     return 0
+
 
 def getUsersFollowedArtists(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -299,12 +393,14 @@ def getUsersFollowedArtists(refresh_token, client_id, client_secret):
     info = starting_info.json()
     return 0
 
+
 def unfollowArtistsOrUsers(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("",
                                  headers={'Authorization': 'Bearer ' + access_token})
     info = starting_info.json()
     return 0
+
 
 def unfollowAPlaylist(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -313,6 +409,7 @@ def unfollowAPlaylist(refresh_token, client_id, client_secret):
     info = starting_info.json()
     return 0
 
+
 ##############
 # Track  API #
 ##############
@@ -320,26 +417,28 @@ def unfollowAPlaylist(refresh_token, client_id, client_secret):
 def getManyTracks(refresh_token, client_id, client_secret, list_of_ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     tracksTempCall = requests.get('https://api.spotify.com/v1/tracks/',
-                              headers={'Authorization': 'Bearer ' + access_token},
-                              params={'ids': list_of_ids})
+                                  headers={'Authorization': 'Bearer ' + access_token},
+                                  params={'ids': list_of_ids})
     tracksTemp = tracksTempCall.json()
     tracks = []
     for i in tracksTemp['tracks']:
-        all_artists = []
+        all_artists = {}
         available_markets = i['available_markets']
         for j in i['artists']:
-            all_artists.append([j['name']])
+            all_artists[j['name']]: j['id']
         tracks.append(objects.Track(i['album']['id'], all_artists, available_markets, i['disc_number'],
                                     i['duration_ms'], i['explicit'], i['external_ids'], i['external_urls'], i['href'],
                                     i['id'], i['name'], i['popularity'], i['preview_url'], i['track_number'],
                                     i['type'], i['uri'], i['is_local']))
     return tracks
 
+
 def getAudioAnalysisForTrack(refresh_token, client_id, client_secret, trackId):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     tempCall = requests.get('https://api.spotify.com/v1/audio-analysis/%s' % trackId,
                             headers={'Authorization': 'Bearer ' + access_token})
     return tempCall.json()
+
 
 def getAudioFeaturesForTrack(refresh_token, client_id, client_secret, trackId):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
@@ -356,20 +455,40 @@ def getAudioFeaturesForTrack(refresh_token, client_id, client_secret, trackId):
                                       AudioFeaturestemp['track_href'], AudioFeaturestemp['type'],
                                       AudioFeaturestemp['uri'], AudioFeaturestemp['valence'])
 
+
 def getTrack(refresh_token, client_id, client_secret, trackId):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     tempCall = requests.get('https://api.spotify.com/v1/tracks/%s' % trackId,
                             headers={'Authorization': 'Bearer ' + access_token})
     trackTemp = tempCall.json()
     available_markets = trackTemp['available_markets']
-    all_artists = []
+    all_artists = {}
     for i in trackTemp['artists']:
-        all_artists.append([i['name']])
+        all_artists[i['name']]: i['id']
     return objects.Track(trackTemp['album']['id'], all_artists, available_markets, trackTemp['disc_number'],
                          trackTemp['duration_ms'], trackTemp['explicit'], trackTemp['external_ids'],
                          trackTemp['external_urls'], trackTemp['href'], trackTemp['id'], trackTemp['name'],
                          trackTemp['popularity'], trackTemp['preview_url'], trackTemp['track_number'],
                          trackTemp['type'], trackTemp['uri'], trackTemp['is_local'])
+
+
+def getAudioFeaturesForSeveralTracks(refresh_token, client_id, client_secret, list_of_ids):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.get('https://api.spotify.com/v1/audio-features',
+                            headers={'Authorization': 'Bearer ' + access_token},
+                            params={'ids': list_of_ids})
+    tempAudioFeature = tempCall.json()
+    AudioFeaturelist = []
+    for i in tempAudioFeature['audio_features']:
+        if i is not None:
+            AudioFeaturelist.append(
+                objects.AudioFeatureObject(i['acousticness'], i['analysis_url'], i['danceability'], i['duration_ms'],
+                                           i['energy'], i['id'], i['instrumentalness'], i['key'], i['liveness'],
+                                           i['loudness'],
+                                           i['mode'], i['speechiness'], i['tempo'], i['time_signature'],
+                                           i['track_href'], i['type'], i['uri'], i['valence']))
+    return AudioFeaturelist
+
 
 ##############
 # Search API #
@@ -379,11 +498,21 @@ def getTrack(refresh_token, client_id, client_secret, trackId):
 def searchForAnItem(refresh_token, client_id, client_secret, q, type):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     tempCall = requests.get('https://api.spotify.com/v1/search',
-                           headers = {'Authorization': 'Bearer ' + access_token},
-                           params={'q': q, 'type': type})
+                            headers={'Authorization': 'Bearer ' + access_token},
+                            params={'q': q, 'type': type})
     searchTemp = tempCall.json()
-    items = {}
-    for i in searchTemp[type]['items']:
-        items[i['name']]:i['id']
+    if type == 'track':
+        items = []
+        holdingArtists = {}
+        for i in searchTemp['artists']:
+            holdingArtists[i['name']] = i['id']
+        items.append(objects.Track(i['id'], holdingArtists, i['available_markets'], i['disc_number'], i['duration_ms'],
+                                   i['explicit'], None, i['external_urls'], i['href'], i['id'], i['name'], None,
+                                   i['preview_url'], i['track_number'], i['type'], i['uri'], None))
+    else:
+        items = {}
+        for i in searchTemp[type]['items']:
+            items[i['name']]: i['id']
+
     return objects.PagingObject(searchTemp[type]['href'], items, searchTemp[type]['limit'], searchTemp[type]['next'],
                                 searchTemp[type]['offset'], searchTemp[type]['previous'], searchTemp[type]['total'])
