@@ -253,9 +253,9 @@ class PlaylistTrackObject:
 
 class RecommendationsResponseObject:
 
-    def __init__(self, seeds, items):
+    def __init__(self, seeds, tracks):
         self.seeds = seeds #list of recommendation seed objects
-        self.items = items #dictionary containing {name:id} structure
+        self.tracks = tracks #list of track objects
 
 class TuneableTrackObject:
 

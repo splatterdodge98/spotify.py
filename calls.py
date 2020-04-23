@@ -97,12 +97,11 @@ def getArtistsTopTracks(refresh_token, client_id, client_secret, artist_id, coun
         list_of_artists = []
         for artist in track['artists']:
             list_of_artists.append(artist['name'])
-        temp_markets = []
-        temp_track = objects.Track(track['album']['id'], list_of_artists, temp_markets,
+        temp_track = objects.Track(track['album']['id'], list_of_artists, None,
                                    track['disc_number'], track['duration_ms'], track['explicit'], track['external_ids'],
                                    track['external_urls'], track['href'], track['id'], track['name'],
                                    track['popularity'], track['preview_url'], track['track_number'], track['type'],
-                                   track['uri'], None)
+                                   track['uri'], track['is_local'])
         track_list.append(temp_track)
     return track_list
 
@@ -221,17 +220,31 @@ def getRecommendations(refresh_token, client_id, client_secret, input_artists, i
                                  params={'seed_artists': input_artists, 'seed_genres': input_genres,
                                          'seed_tracks': input_tracks, 'limit': num})
     info = starting_info.json()
+    track_list = []
     seed_list = []
-    #for item in info[]:
-    #recommends_response = objects.RecommendationsResponseObject()
-    return 0
+    for track in info['tracks']:
+        artists = []
+        for artist in track['artists']:
+            artists.append([artist['name']])
+        temp_track = objects.Track(track['album']['id'], artists, None, track['disc_number'], track['duration_ms'],
+                                   track['explicit'], track['external_ids'], track['external_urls'], track['href'],
+                                   track['id'], track['name'], track['popularity'], track['preview_url'],
+                                   track['track_number'], track['type'], track['uri'], track['is_local'])
+        track_list.append(temp_track)
+    for seed in info['seeds']:
+        temp_seed = objects.RecommendationSeedObject(seed['initialPoolSize'], seed['afterFilteringSize'],
+                                                     seed['afterRelinkingSize'], seed['href'], seed['id'], seed['type'])
+        seed_list.append(temp_seed)
+    recommends_response = objects.RecommendationsResponseObject(seed_list, track_list)
+    return recommends_response
 
 def getRecommendationGenres(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.get("https://api.spotify.com/v1/recommendations/available-genre-seeds",
                                  headers={'Authorization': 'Bearer ' + access_token})
     info = starting_info.json()
-    return 0
+    return_list = info['genres']
+    return return_list
 
 def getAllNewReleases(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
