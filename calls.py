@@ -189,18 +189,41 @@ def getACategory(refresh_token, client_id, client_secret, category_id):
     category = objects.Category(info['href'], icon_list, info['id'], info['name'])
     return category
 
-def getACategorysPlaylists(refresh_token, client_id, client_secret):
+def getACategorysPlaylists(refresh_token, client_id, client_secret, category_id, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/browse/categories/%s/playlists" % category_id,
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    list_of_playlists = []
+    for playlist in info['playlists']['items']:
+        list_of_images = []
+        for image in playlist['images']:
+            list_of_images.append(image['url'])
+        temp_playlist = objects.PlaylistObject(playlist['collaborative'], playlist['external_urls'], playlist['href'],
+                                               playlist['id'], list_of_images, playlist['name'],
+                                               playlist['owner']['display_name'], playlist['public'],
+                                               playlist['snapshot_id'], playlist['tracks'], playlist['type'],
+                                               playlist['uri'])
+        list_of_playlists.append(temp_playlist)
+    return list_of_playlists
 
-def getRecommendations(refresh_token, client_id, client_secret):
+def getRecommendations(refresh_token, client_id, client_secret, input_artists, input_genres, input_tracks, num=20):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/recommendations",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'seed_artists': input_artists, 'seed_genres': input_genres,
+                                         'seed_tracks': input_tracks, 'limit': num})
     info = starting_info.json()
+    seed_list = []
+    #for item in info[]:
+    #recommends_response = objects.RecommendationsResponseObject()
     return 0
 
 def getRecommendationGenres(refresh_token, client_id, client_secret):
@@ -349,5 +372,5 @@ def searchForAnItem(refresh_token, client_id, client_secret, q, type):
     items = {}
     for i in searchTemp[type]['items']:
         items[i['name']]:i['id']
-
-    return objects.PagingObject(searchTemp[type]['href'], items, searchTemp[type]['limit'], searchTemp[type]['next'], searchTemp[type]['offset'], searchTemp[type]['previous'], searchTemp[type]['total'] )
+    return objects.PagingObject(searchTemp[type]['href'], items, searchTemp[type]['limit'], searchTemp[type]['next'],
+                                searchTemp[type]['offset'], searchTemp[type]['previous'], searchTemp[type]['total'])
