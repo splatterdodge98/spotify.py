@@ -334,3 +334,20 @@ def getTrack(refresh_token, client_id, client_secret, trackId):
                          trackTemp['external_urls'], trackTemp['href'], trackTemp['id'], trackTemp['name'],
                          trackTemp['popularity'], trackTemp['preview_url'], trackTemp['track_number'],
                          trackTemp['type'], trackTemp['uri'], trackTemp['is_local'])
+
+##############
+# Search API #
+##############
+
+
+def searchForAnItem(refresh_token, client_id, client_secret, q, type):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.get('https://api.spotify.com/v1/search',
+                           headers = {'Authorization': 'Bearer ' + access_token},
+                           params={'q': q, 'type': type})
+    searchTemp = tempCall.json()
+    items = {}
+    for i in searchTemp[type]['items']:
+        items[i['name']]:i['id']
+
+    return objects.PagingObject(searchTemp[type]['href'], items, searchTemp[type]['limit'], searchTemp[type]['next'], searchTemp[type]['offset'], searchTemp[type]['previous'], searchTemp[type]['total'] )
