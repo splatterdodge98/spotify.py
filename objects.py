@@ -100,7 +100,7 @@ class PlaylistObject:
         self.playlistId = playlistId #String
         self.images = images #List<String>
         self.name = name #String.
-        self.owner = owner #2-String Dictionary
+        self.owner = owner #String.
         self.public = public #Boolean
         self.snapshotId = snapshotId #String
         self.tracks = tracks #2-String Dictionary
@@ -253,9 +253,9 @@ class PlaylistTrackObject:
 
 class RecommendationsResponseObject:
 
-    def __init__(self, seeds, tracks):
+    def __init__(self, seeds, items):
         self.seeds = seeds #list of recommendation seed objects
-        self.tracks = tracks #dictionary containing {name:id} structure
+        self.items = items #dictionary containing {name:id} structure
 
 class TuneableTrackObject:
 
