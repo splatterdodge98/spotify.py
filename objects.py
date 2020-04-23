@@ -126,7 +126,7 @@ class Category:
 
     def __init__(self, href, icons, id, name):
         self.href = href # String type
-        self.icons = icons # List of images
+        self.icons = icons # List of image urls
         self.id = id # String type
         self.name = name # String type
 

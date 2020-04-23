@@ -153,6 +153,130 @@ def getCurrentUsersProfile(refresh_token, client_id, client_secret):
                                           real_info['type'], real_info['uri'])
     return user_info
 
+###############
+# Browse  API #
+###############
+
+def getManyCategories(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("https://api.spotify.com/v1/browse/categories",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
+    info = starting_info.json()
+    category_list = []
+    for category in info['categories']['items']:
+        icon_list = []
+        for icon in category['icons']:
+            icon_list.append(icon['url'])
+        temp_category = objects.Category(category['href'], icon_list, category['id'], category['name'])
+        category_list.append(temp_category)
+    return category_list
+
+def getACategory(refresh_token, client_id, client_secret, category_id):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("https://api.spotify.com/v1/browse/categories/%s" % category_id,
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    icon_list = []
+    for icon in info['icons']:
+        icon_list.append(icon['url'])
+    category = objects.Category(info['href'], icon_list, info['id'], info['name'])
+    return category
+
+def getACategorysPlaylists(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getRecommendations(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getRecommendationGenres(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getAllNewReleases(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getAllFeaturedPlaylists(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+###############
+# Follow  API #
+###############
+
+def getFollowingState(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def followAnArtistOrUser(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def followAPlaylist(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getUsersFollowedArtists(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def unfollowArtistsOrUsers(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def unfollowAPlaylist(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
 ##############
 # Track  API #
 ##############
