@@ -334,20 +334,61 @@ def getRecommendationGenres(refresh_token, client_id, client_secret):
     return return_list
 
 
-def getAllNewReleases(refresh_token, client_id, client_secret):
+def getAllNewReleases(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/browse/new-releases",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    album_list = []
+    for album in info['albums']['items']:
+        artist_dict = {}
+        list_of_images = []
+        for artist in album['artists']:
+            artist_dict[artist['name']]: artist['id']
+        for image in album['images']:
+            list_of_images.append(image['url'])
+        album_list.append(objects.Album(album['album_type'], artist_dict, None, album['external_urls'], None,
+                                        album['id'], list_of_images, album['name'], album['release_date'], None,
+                                        album['uri']))
+    paging_obj = objects.PagingObject(info['albums']['href'], album_list, info['albums']['limit'],
+                                      info['albums']['next'], info['albums']['offset'], info['albums']['previous'],
+                                      info['albums']['total'])
+    return paging_obj
 
 
-def getAllFeaturedPlaylists(refresh_token, client_id, client_secret):
+def getAllFeaturedPlaylists(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/browse/featured-playlists",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    list_of_playlists = []
+    for playlist in info['playlists']['items']:
+        list_of_images = []
+        for image in playlist['images']:
+            list_of_images.append(image['url'])
+        list_of_playlists.append(objects.PlaylistObject(playlist['collaborative'], playlist['external_urls'],
+                                                        playlist['href'], playlist['id'], list_of_images,
+                                                        playlist['name'], playlist['owner']['display_name'],
+                                                        playlist['public'], playlist['snapshot_id'],
+                                                        playlist['tracks'], playlist['type'], playlist['uri']))
+    paging_obj = objects.PagingObject(info['playlists']['href'], list_of_playlists, info['playlists']['limit'],
+                                      info['playlists']['next'], info['playlists']['offset'],
+                                      info['playlists']['previous'], info['playlists']['total'])
+    return paging_obj
 
 
 ###############
