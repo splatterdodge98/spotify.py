@@ -395,28 +395,32 @@ def getAllFeaturedPlaylists(refresh_token, client_id, client_secret, num=20, sta
 # Follow  API #
 ###############
 
-def getFollowingState(refresh_token, client_id, client_secret):
+def getFollowingState(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/me/following/contains",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'type': type, 'ids': ids})
     info = starting_info.json()
-    return 0
+    return info
 
 
-def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret):
+def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret, playlist_id, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/playlists/%s/followers/contains" % playlist_id,
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
     info = starting_info.json()
-    return 0
+    return info
 
 
-def followAnArtistOrUser(refresh_token, client_id, client_secret):
+def followAnArtistOrUser(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    data_array = ids.split(',', 49).json()
+    starting_info = requests.put("https://api.spotify.com/v1/me/following",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'type': type, 'ids': ids},
+                                 data={'ids': data_array})
+    return starting_info.reason
 
 
 def followAPlaylist(refresh_token, client_id, client_secret):
