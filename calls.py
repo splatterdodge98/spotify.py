@@ -586,5 +586,5 @@ def userPlaybackDeviceTransfer(refresh_token, client_id, client_secret):
     userDevicePlaybackCheck = requests.put("https://api.spotify.com/v1/me/player",
                                            headers={'authorization': 'Bearer' +access_token},
                                            params=['device_ids'])
-    #Somethings missing here...
+    #Somethings missing here....
     return userDevicePlaybackCheck
