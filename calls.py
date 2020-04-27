@@ -415,44 +415,55 @@ def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret, playlis
 
 def followAnArtistOrUser(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    data_array = ids.split(',', 49).json()
     starting_info = requests.put("https://api.spotify.com/v1/me/following",
                                  headers={'Authorization': 'Bearer ' + access_token},
-                                 params={'type': type, 'ids': ids},
-                                 data={'ids': data_array})
-    return starting_info.reason
+                                 params={'type': type, 'ids': ids})
+    return starting_info
 
 
-def followAPlaylist(refresh_token, client_id, client_secret):
+def followAPlaylist(refresh_token, client_id, client_secret, playlist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.put("https://api.spotify.com/v1/playlists/%s/followers" % playlist_id,
                                  headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    return starting_info
 
 
-def getUsersFollowedArtists(refresh_token, client_id, client_secret):
+def getUsersFollowedArtists(refresh_token, client_id, client_secret, type, num=20):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/me/following",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'type': type, 'limit': num})
     info = starting_info.json()
-    return 0
+    list_of_artists = []
+    for artist in info['artists']['items']:
+        list_of_images = []
+        for images in artist["images"]:
+            list_of_images.append(images["url"])
+        list_of_artists.append(objects.Artist(artist["external_urls"], artist["followers"]["total"], artist["genres"],
+                                              artist["href"], artist["id"], list_of_images, artist["name"],
+                                              artist["popularity"], artist["type"], artist["uri"]))
+    cursor_obj = objects.CursorBasedPagingObject(info['artists']['href'], list_of_artists, info['artists']['next'],
+                                                 info['artists']['cursors'], info['artists']['total'])
+    return cursor_obj
 
 
-def unfollowArtistsOrUsers(refresh_token, client_id, client_secret):
+def unfollowArtistsOrUsers(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    starting_info = requests.delete("https://api.spotify.com/v1/me/following",
+                                    headers={'Authorization': 'Bearer ' + access_token},
+                                    params={'type': type, 'ids': ids})
+    return starting_info
 
 
-def unfollowAPlaylist(refresh_token, client_id, client_secret):
+def unfollowAPlaylist(refresh_token, client_id, client_secret, playlist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.delete("https://api.spotify.com/v1/playlists/%s/followers" % playlist_id,
                                  headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    return starting_info
 
 
 ##############
