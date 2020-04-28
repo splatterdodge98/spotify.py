@@ -13,6 +13,123 @@ def getAccessToken(refresh_token, client_id, client_secret):
     access_token = new_access_token.json()['access_token']
     return access_token
 
+################
+# Library  API #
+################
+
+def saveTracksforUser(refresh_token, client_id, client_secret, ids):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.put("https://api.spotify.com/v1/me/tracks",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
+    return starting_info
+
+def removeUsersSavedTracks(refresh_token, client_id, client_secret, ids):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.delete("https://api.spotify.com/v1/me/tracks",
+                                    headers={'Authorization': 'Bearer ' + access_token},
+                                    params={'ids': ids})
+    return starting_info
+
+def checkUsersSavedTracks(refresh_token, client_id, client_secret, ids):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("https://api.spotify.com/v1/me/tracks/contains",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
+    info = starting_info.json()
+    return info
+
+def getUsersSavedTracks(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("https://api.spotify.com/v1/me/tracks",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
+    info = starting_info.json()
+    list_of_tracks = []
+    for track in info['items']:
+        list_of_artists = []
+        for artist in track['track']['artists']:
+            list_of_artists.append(artist['name'])
+        list_of_tracks.append(objects.SavedTrack(track['track']['album']['id'], list_of_artists,
+                                                 track['track']['available_markets'], track['track']['disc_number'],
+                                                 track['track']['duration_ms'], track['track']['explicit'],
+                                                 track['track']['external_ids'], track['track']['external_urls'],
+                                                 track['track']['href'], track['track']['id'], None, None, None,
+                                                 track['track']['name'], track['track']['popularity'],
+                                                 track['track']['preview_url'], track['track']['track_number'],
+                                                 track['track']['type'], track['track']['uri'], None,
+                                                 track['added_at']))
+    paging_obj = objects.PagingObject(info['href'], list_of_tracks, info['limit'], info['next'], info['offset'],
+                                      info['previous'], info['total'])
+    return paging_obj
+
+def saveAlbumsforUser(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    return starting_info
+
+def removeAlbumsforUser(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    return starting_info
+
+def checkUsersSavedAlbums(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return info
+
+def getUsersSavedAlbums(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
+    info = starting_info.json()
+    return 0
+
+def saveShowsforUser(refresh_token, client_id, client_secret): # IGNORE FOR NOW
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def removeUsersSavedShows(refresh_token, client_id, client_secret): # IGNORE FOR NOW
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def checkUsersSavedShows(refresh_token, client_id, client_secret): # IGNORE FOR NOW
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getUsersSavedShows(refresh_token, client_id, client_secret): # IGNORE FOR NOW
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
 
 ##############
 # Album  API #
@@ -583,7 +700,6 @@ def getAudioFeaturesForSeveralTracks(refresh_token, client_id, client_secret, li
 # Search API #
 ##############
 
-
 def searchForAnItem(refresh_token, client_id, client_secret, q, type):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     tempCall = requests.get('https://api.spotify.com/v1/search',
@@ -605,3 +721,34 @@ def searchForAnItem(refresh_token, client_id, client_secret, q, type):
 
     return objects.PagingObject(searchTemp[type]['href'], items, searchTemp[type]['limit'], searchTemp[type]['next'],
                                 searchTemp[type]['offset'], searchTemp[type]['previous'], searchTemp[type]['total'])
+
+
+################
+# Episodes API # IGNORE THESE FUNCTIONS FOR NOW.
+################
+
+def getAnEpisode(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+def getManyEpisodes(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0
+
+
+#######################
+# Personalization API #
+#######################
+
+def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    starting_info = requests.get("",
+                                 headers={'Authorization': 'Bearer ' + access_token})
+    info = starting_info.json()
+    return 0

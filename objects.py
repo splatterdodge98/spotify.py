@@ -186,7 +186,7 @@ class SavedTrack:
         self.discNum = discNum #Integer
         self.durationMs = durationMs #Integer
         self.explicit = explicit #Boolean
-        self.externalIds = externalIds #ExternalID Object
+        self.externalIds = externalIds #Dictionary, { id_type: id }
         self.externalUrls = externalUrls #2-String Dictionary
         self.href = href #String.
         self.trackId = trackId #String
