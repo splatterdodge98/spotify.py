@@ -110,8 +110,39 @@ def replaceAPlaylistsItems(refresh_token, client_id, client_secret, uris, playli
     tempCall = requests.put('https://api.spotify.com/v1/playlists/%s/tracks' % playlistId,
                             headers={'Authorization': 'Bearer ' + access_token, 'Content-Type': 'application/json'},
                             data={'uris': uris})
-    return tempCall.reason
+    return tempCall
 
+
+def getAListOfAUsersPlaylists(refresh_token, client_id, client_secret, userID):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.get('https://api.spotify.com/v1/users/%s/playlists' % userID,
+                            headers={'Authorization': 'Bearer ' + access_token})
+    tempPlaylists = tempCall.json()
+    listOfPlaylists = {}
+    for i in tempPlaylists['items']:
+        listOfPlaylists[i['name']] = i['id']
+    return objects.PagingObject(tempPlaylists['href'], listOfPlaylists, tempPlaylists['limit'], tempPlaylists['next'],
+                                tempPlaylists['offset'], tempPlaylists['previous'], tempPlaylists['total'])
+
+
+def changeAPlaylistsDetails(refresh_token, client_id, client_secret, playlistID, **kwargs):
+    optionalList = ['name', 'public', 'collaborative', 'description']
+    jsonToPass = {}
+    for key in kwargs:
+        if key in optionalList:
+            jsonToPass[key] = kwargs[key]
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.put('https://api.spotify.com/v1/playlists/%s' % playlistID,
+                            headers={'Authorization': 'Bearer ' + access_token, 'Content-Type': 'application/json'},
+                            data=jsonToPass)
+    return tempCall
+
+def uploadACustomPlaylistCoverImage(refresh_token, client_id, client_secret, playlistID, imageB64):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    tempCall = requests.put('https://api.spotify.com/v1/playlists/%s/images' % playlistID,
+                            headers={'Authorization': 'Bearer ' + access_token, 'Content-Type': 'image/jpeg'},
+                            data= imageB64)
+    return tempCall
 
 ##############
 # Artist API #
@@ -275,6 +306,7 @@ def getACategory(refresh_token, client_id, client_secret, category_id):
     category = objects.Category(info['href'], icon_list, info['id'], info['name'])
     return category
 
+
 def getACategorysPlaylists(refresh_token, client_id, client_secret, category_id, num=20, start=0):
     if num > 50:
         num = 50
@@ -300,6 +332,7 @@ def getACategorysPlaylists(refresh_token, client_id, client_secret, category_id,
         list_of_playlists.append(temp_playlist)
     return list_of_playlists
 
+
 def getRecommendations(refresh_token, client_id, client_secret, input_artists, input_genres, input_tracks, num=20):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("https://api.spotify.com/v1/recommendations",
@@ -308,8 +341,8 @@ def getRecommendations(refresh_token, client_id, client_secret, input_artists, i
                                          'seed_tracks': input_tracks, 'limit': num})
     info = starting_info.json()
     seed_list = []
-    #for item in info[]:
-    #recommends_response = objects.RecommendationsResponseObject()
+    # for item in info[]:
+    # recommends_response = objects.RecommendationsResponseObject()
     return 0
 
 
