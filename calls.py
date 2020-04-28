@@ -53,9 +53,9 @@ def getUsersSavedTracks(refresh_token, client_id, client_secret, num=20, start=0
     info = starting_info.json()
     list_of_tracks = []
     for track in info['items']:
-        list_of_artists = []
+        list_of_artists = {}
         for artist in track['track']['artists']:
-            list_of_artists.append(artist['name'])
+            list_of_artists[artist['name']]: artist['id']
         list_of_tracks.append(objects.SavedTrack(track['track']['album']['id'], list_of_artists,
                                                  track['track']['available_markets'], track['track']['disc_number'],
                                                  track['track']['duration_ms'], track['track']['explicit'],
@@ -69,22 +69,25 @@ def getUsersSavedTracks(refresh_token, client_id, client_secret, num=20, start=0
                                       info['previous'], info['total'])
     return paging_obj
 
-def saveAlbumsforUser(refresh_token, client_id, client_secret):
+def saveAlbumsforUser(refresh_token, client_id, client_secret, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.put("https://api.spotify.com/v1/me/albums",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
     return starting_info
 
-def removeAlbumsforUser(refresh_token, client_id, client_secret):
+def removeAlbumsforUser(refresh_token, client_id, client_secret, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.delete("https://api.spotify.com/v1/me/albums",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
     return starting_info
 
-def checkUsersSavedAlbums(refresh_token, client_id, client_secret):
+def checkUsersSavedAlbums(refresh_token, client_id, client_secret, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/me/albums/contains",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
     info = starting_info.json()
     return info
 
@@ -96,12 +99,43 @@ def getUsersSavedAlbums(refresh_token, client_id, client_secret, num=20, start=0
     if start < 0:
         start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.get("https://api.spotify.com/v1/me/albums",
                                  headers={'Authorization': 'Bearer ' + access_token},
                                  params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    list_of_albums = []
+    for album in info['items']:
+        list_of_artists = {}
+        list_of_images = []
+        list_of_tracks = []
+        for artist in album['album']['artists']:
+            list_of_artists[artist['name']]: artist['id']
+        for image in album['album']['images']:
+            list_of_images.append(image['url'])
+        for track in album['album']['tracks']['items']:
+            track_list_of_artists = {}
+            for artist in track['artists']:
+                track_list_of_artists[artist['name']]: artist['id']
+            list_of_tracks.append(objects.Track(album['album']['id'], track_list_of_artists, track['available_markets'],
+                                                track['disc_number'], track['duration_ms'], track['explicit'], None,
+                                                track['external_urls'], track['href'], track['id'], track['name'],
+                                                None, track['preview_url'], track['track_number'], track['type'],
+                                                track['uri'], None))
+        album_paging_object = objects.PagingObject(album['album']['tracks']['href'], list_of_tracks,
+                                                   album['album']['tracks']['limit'], album['album']['tracks']['next'],
+                                                   album['album']['tracks']['offset'],
+                                                   album['album']['tracks']['previous'],
+                                                   album['album']['tracks']['total'])
+        list_of_albums.append(objects.SavedAlbum(album['album']['album_type'], list_of_artists,
+                                                 album['album']['external_ids'], album['album']['external_urls'],
+                                                 album['album']['genres'], album['album']['id'], list_of_images,
+                                                 album['album']['name'], album['album']['release_date'],
+                                                 album_paging_object, album['album']['uri']))
+    paging_obj = objects.PagingObject(info['href'], list_of_albums, info['limit'], info['next'], info['offset'],
+                                      info['previous'], info['total'])
+    return paging_obj
 
+# IGNORE THE SHOWS FUNCTIONS FOR NOW
 def saveShowsforUser(refresh_token, client_id, client_secret): # IGNORE FOR NOW
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     starting_info = requests.get("",
@@ -323,9 +357,9 @@ def getArtistsTopTracks(refresh_token, client_id, client_secret, artist_id, coun
     real_list = starting_list.json()
     track_list = []
     for track in real_list['tracks']:
-        list_of_artists = []
+        list_of_artists = {}
         for artist in track['artists']:
-            list_of_artists.append(artist['name'])
+            list_of_artists[artist['name']]: artist['id']
         temp_track = objects.Track(track['album']['id'], list_of_artists, None,
                                    track['disc_number'], track['duration_ms'], track['explicit'], track['external_ids'],
                                    track['external_urls'], track['href'], track['id'], track['name'],

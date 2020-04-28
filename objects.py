@@ -136,14 +136,14 @@ class SavedAlbum:
     def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate,
                  tracks, timestamp, URI):
         self.albumType = albumType  # String type
-        self.artists = artists  # List of Names of the Artists
+        self.artists = artists  # Dictionary {name: id}
         self.externalIds = externalIds  # ExternalID Object
         self.externalUrls = externalUrls  # ExternalURLS Object
         self.genres = genres  # list of strings
         self.albumId = albumId  # String
         self.images = images  # Url for the image
         self.name = name  # String
-        self.releaseDate = releaseDate  # String that we'll convert to DateTime
+        self.releaseDate = releaseDate  # String
         self.tracks = tracks  # Dictionary with {name:id} structure
         self.timestamp = timestamp # datetime type
         self.URI = URI  # string
