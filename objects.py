@@ -37,11 +37,11 @@ class ContextObject:
 
 class CursorBasedPagingObject:
 
-    def __init__(self, href, items, limit, nextPage, cursors, total):
+    def __init__(self, href, items, nextPage, cursors, total):
         self.href = href #String
         self.items = items #Array of Objects (Unsure what kind)
         self.nextPage = nextPage #String (URL of next page)
-        self.cursors = cursors #String (Cursor Object)
+        self.cursors = cursors #String (value of the sole entry in the dict that Spotify returns)
         self.total = total #Integer
 
 class PublicUserObject:
@@ -253,9 +253,9 @@ class PlaylistTrackObject:
 
 class RecommendationsResponseObject:
 
-    def __init__(self, seeds, items):
+    def __init__(self, seeds, tracks):
         self.seeds = seeds #list of recommendation seed objects
-        self.items = items #dictionary containing {name:id} structure
+        self.tracks = tracks #list of track objects
 
 class TuneableTrackObject:
 

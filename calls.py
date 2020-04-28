@@ -209,12 +209,11 @@ def getArtistsTopTracks(refresh_token, client_id, client_secret, artist_id, coun
         list_of_artists = []
         for artist in track['artists']:
             list_of_artists.append(artist['name'])
-        temp_markets = []
-        temp_track = objects.Track(track['album']['id'], list_of_artists, temp_markets,
+        temp_track = objects.Track(track['album']['id'], list_of_artists, None,
                                    track['disc_number'], track['duration_ms'], track['explicit'], track['external_ids'],
                                    track['external_urls'], track['href'], track['id'], track['name'],
                                    track['popularity'], track['preview_url'], track['track_number'], track['type'],
-                                   track['uri'], None)
+                                   track['uri'], track['is_local'])
         track_list.append(temp_track)
     return track_list
 
@@ -340,94 +339,164 @@ def getRecommendations(refresh_token, client_id, client_secret, input_artists, i
                                  params={'seed_artists': input_artists, 'seed_genres': input_genres,
                                          'seed_tracks': input_tracks, 'limit': num})
     info = starting_info.json()
+    track_list = []
     seed_list = []
-    # for item in info[]:
-    # recommends_response = objects.RecommendationsResponseObject()
-    return 0
+    for track in info['tracks']:
+        artists = []
+        for artist in track['artists']:
+            artists.append([artist['name']])
+        temp_track = objects.Track(track['album']['id'], artists, None, track['disc_number'], track['duration_ms'],
+                                   track['explicit'], track['external_ids'], track['external_urls'], track['href'],
+                                   track['id'], track['name'], track['popularity'], track['preview_url'],
+                                   track['track_number'], track['type'], track['uri'], track['is_local'])
+        track_list.append(temp_track)
+    for seed in info['seeds']:
+        temp_seed = objects.RecommendationSeedObject(seed['initialPoolSize'], seed['afterFilteringSize'],
+                                                     seed['afterRelinkingSize'], seed['href'], seed['id'], seed['type'])
+        seed_list.append(temp_seed)
+    recommends_response = objects.RecommendationsResponseObject(seed_list, track_list)
+    return recommends_response
 
 
 def getRecommendationGenres(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.get("https://api.spotify.com/v1/recommendations/available-genre-seeds",
                                  headers={'Authorization': 'Bearer ' + access_token})
     info = starting_info.json()
-    return 0
+    return_list = info['genres']
+    return return_list
 
 
-def getAllNewReleases(refresh_token, client_id, client_secret):
+def getAllNewReleases(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/browse/new-releases",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    album_list = []
+    for album in info['albums']['items']:
+        artist_dict = {}
+        list_of_images = []
+        for artist in album['artists']:
+            artist_dict[artist['name']]: artist['id']
+        for image in album['images']:
+            list_of_images.append(image['url'])
+        album_list.append(objects.Album(album['album_type'], artist_dict, None, album['external_urls'], None,
+                                        album['id'], list_of_images, album['name'], album['release_date'], None,
+                                        album['uri']))
+    paging_obj = objects.PagingObject(info['albums']['href'], album_list, info['albums']['limit'],
+                                      info['albums']['next'], info['albums']['offset'], info['albums']['previous'],
+                                      info['albums']['total'])
+    return paging_obj
 
 
-def getAllFeaturedPlaylists(refresh_token, client_id, client_secret):
+def getAllFeaturedPlaylists(refresh_token, client_id, client_secret, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/browse/featured-playlists",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    list_of_playlists = []
+    for playlist in info['playlists']['items']:
+        list_of_images = []
+        for image in playlist['images']:
+            list_of_images.append(image['url'])
+        list_of_playlists.append(objects.PlaylistObject(playlist['collaborative'], playlist['external_urls'],
+                                                        playlist['href'], playlist['id'], list_of_images,
+                                                        playlist['name'], playlist['owner']['display_name'],
+                                                        playlist['public'], playlist['snapshot_id'],
+                                                        playlist['tracks'], playlist['type'], playlist['uri']))
+    paging_obj = objects.PagingObject(info['playlists']['href'], list_of_playlists, info['playlists']['limit'],
+                                      info['playlists']['next'], info['playlists']['offset'],
+                                      info['playlists']['previous'], info['playlists']['total'])
+    return paging_obj
 
 
 ###############
 # Follow  API #
 ###############
 
-def getFollowingState(refresh_token, client_id, client_secret):
+def getFollowingState(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/me/following/contains",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'type': type, 'ids': ids})
     info = starting_info.json()
-    return 0
+    return info
 
 
-def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret):
+def checkIfUsersFollowAPlaylist(refresh_token, client_id, client_secret, playlist_id, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/playlists/%s/followers/contains" % playlist_id,
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'ids': ids})
     info = starting_info.json()
-    return 0
+    return info
 
 
-def followAnArtistOrUser(refresh_token, client_id, client_secret):
+def followAnArtistOrUser(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    starting_info = requests.put("https://api.spotify.com/v1/me/following",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'type': type, 'ids': ids})
+    return starting_info
 
 
-def followAPlaylist(refresh_token, client_id, client_secret):
+def followAPlaylist(refresh_token, client_id, client_secret, playlist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.put("https://api.spotify.com/v1/playlists/%s/followers" % playlist_id,
                                  headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    return starting_info
 
 
-def getUsersFollowedArtists(refresh_token, client_id, client_secret):
+def getUsersFollowedArtists(refresh_token, client_id, client_secret, type, num=20):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/me/following",
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'type': type, 'limit': num})
     info = starting_info.json()
-    return 0
+    list_of_artists = []
+    for artist in info['artists']['items']:
+        list_of_images = []
+        for images in artist["images"]:
+            list_of_images.append(images["url"])
+        list_of_artists.append(objects.Artist(artist["external_urls"], artist["followers"]["total"], artist["genres"],
+                                              artist["href"], artist["id"], list_of_images, artist["name"],
+                                              artist["popularity"], artist["type"], artist["uri"]))
+    cursor_obj = objects.CursorBasedPagingObject(info['artists']['href'], list_of_artists, info['artists']['next'],
+                                                 info['artists']['cursors'], info['artists']['total'])
+    return cursor_obj
 
 
-def unfollowArtistsOrUsers(refresh_token, client_id, client_secret):
+def unfollowArtistsOrUsers(refresh_token, client_id, client_secret, type, ids):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    starting_info = requests.delete("https://api.spotify.com/v1/me/following",
+                                    headers={'Authorization': 'Bearer ' + access_token},
+                                    params={'type': type, 'ids': ids})
+    return starting_info
 
 
-def unfollowAPlaylist(refresh_token, client_id, client_secret):
+def unfollowAPlaylist(refresh_token, client_id, client_secret, playlist_id):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
+    starting_info = requests.delete("https://api.spotify.com/v1/playlists/%s/followers" % playlist_id,
                                  headers={'Authorization': 'Bearer ' + access_token})
-    info = starting_info.json()
-    return 0
+    return starting_info
 
 
 ##############
