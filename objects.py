@@ -161,7 +161,7 @@ class Track:
     
     def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, href, trackId, name, popularity, previewUrl, trackNum, type, uri, isLocal):
         self.albumId = albumId #String
-        self.artists = artists #List<String>
+        self.artists = artists #Dictionary { name:id }
         self.availableMarkets = availableMarkets #List<String>
         self.discNum = discNum #Integer
         self.durationMs = durationMs #Integer

@@ -851,9 +851,37 @@ def getManyEpisodes(refresh_token, client_id, client_secret):
 # Personalization API #
 #######################
 
-def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret):
+def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret, type, num=20, start=0):
+    if num > 50:
+        num = 50
+    if num < 1:
+        num = 1
+    if start < 0:
+        start = 0
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    starting_info = requests.get("",
-                                 headers={'Authorization': 'Bearer ' + access_token})
+    starting_info = requests.get("https://api.spotify.com/v1/me/top/%s" % type,
+                                 headers={'Authorization': 'Bearer ' + access_token},
+                                 params={'limit': num, 'offset': start})
     info = starting_info.json()
-    return 0
+    list_of_items = []
+    if type == 'artists':
+        for artist in info['items']:
+            list_of_images = []
+            for image in artist['images']:
+                list_of_images.append(image['url'])
+            list_of_items.append(objects.Artist(artist['external_urls'], artist['followers']['total'], artist['genres'],
+                                                artist['href'], artist['id'], list_of_images, artist['name'],
+                                                artist['popularity'], artist['type'], artist['uri']))
+    elif type == 'tracks':
+        for track in info['items']:
+            artist_dict = {}
+            for artist in track['artists']:
+                artist_dict[artist['name']]: artist['id']
+            list_of_items.append(objects.Track(track['album']['id'], artist_dict, track['available_markets'],
+                                               track['disc_number'], track['duration_ms'], track['explicit'],
+                                               track['external_ids'], track['external_urls'], track['href'],
+                                               track['id'], track['name'], track['popularity'], track['preview_url'],
+                                               track['track_number'], track['type'], track['uri'], None))
+    paging_obj = objects.PagingObject(info['href'], list_of_items, info['limit'], info['next'], info['offset'],
+                                      info['previous'], info['total'])
+    return paging_obj
