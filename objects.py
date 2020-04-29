@@ -37,11 +37,11 @@ class ContextObject:
 
 class CursorBasedPagingObject:
 
-    def __init__(self, href, items, limit, nextPage, cursors, total):
+    def __init__(self, href, items, nextPage, cursors, total):
         self.href = href #String
         self.items = items #Array of Objects (Unsure what kind)
         self.nextPage = nextPage #String (URL of next page)
-        self.cursors = cursors #String (Cursor Object)
+        self.cursors = cursors #String (value of the sole entry in the dict that Spotify returns)
         self.total = total #Integer
 
 class PublicUserObject:
@@ -93,9 +93,11 @@ class DeviceObject:
 
 class PlaylistObject:
 
-    def __init__(self, collaborative, externalUrls, href, playlistId, images, name, owner, public, snapshotId, tracks, type, uri):
+    def __init__(self, collaborative, description, externalUrls, followers, href, playlistId, images, name, owner, public, snapshotId, tracks, type, uri):
         self.collaborative = collaborative #Boolean
+        self.description = description #string
         self.externalUrls = externalUrls #2-String Dictionary
+        self.followers = followers #int
         self.href = href #String
         self.playlistId = playlistId #String
         self.images = images #List<String>
@@ -136,14 +138,14 @@ class SavedAlbum:
     def __init__(self, albumType, artists, externalIds, externalUrls, genres, albumId, images, name, releaseDate,
                  tracks, timestamp, URI):
         self.albumType = albumType  # String type
-        self.artists = artists  # List of Names of the Artists
+        self.artists = artists  # Dictionary {name: id}
         self.externalIds = externalIds  # ExternalID Object
         self.externalUrls = externalUrls  # ExternalURLS Object
         self.genres = genres  # list of strings
         self.albumId = albumId  # String
         self.images = images  # Url for the image
         self.name = name  # String
-        self.releaseDate = releaseDate  # String that we'll convert to DateTime
+        self.releaseDate = releaseDate  # String
         self.tracks = tracks  # Dictionary with {name:id} structure
         self.timestamp = timestamp # datetime type
         self.URI = URI  # string
@@ -159,7 +161,7 @@ class Track:
     
     def __init__(self, albumId, artists, availableMarkets, discNum, durationMs, explicit, externalIds, externalUrls, href, trackId, name, popularity, previewUrl, trackNum, type, uri, isLocal):
         self.albumId = albumId #String
-        self.artists = artists #List<String>
+        self.artists = artists #Dictionary { name:id }
         self.availableMarkets = availableMarkets #List<String>
         self.discNum = discNum #Integer
         self.durationMs = durationMs #Integer
@@ -186,7 +188,7 @@ class SavedTrack:
         self.discNum = discNum #Integer
         self.durationMs = durationMs #Integer
         self.explicit = explicit #Boolean
-        self.externalIds = externalIds #ExternalID Object
+        self.externalIds = externalIds #Dictionary, { id_type: id }
         self.externalUrls = externalUrls #2-String Dictionary
         self.href = href #String.
         self.trackId = trackId #String
