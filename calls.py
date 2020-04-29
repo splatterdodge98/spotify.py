@@ -130,7 +130,7 @@ def getUsersSavedAlbums(refresh_token, client_id, client_secret, num=20, start=0
                                                  album['album']['external_ids'], album['album']['external_urls'],
                                                  album['album']['genres'], album['album']['id'], list_of_images,
                                                  album['album']['name'], album['album']['release_date'],
-                                                 album_paging_object, album['album']['uri']))
+                                                 album_paging_object, album['added_at'], album['album']['uri']))
     paging_obj = objects.PagingObject(info['href'], list_of_albums, info['limit'], info['next'], info['offset'],
                                       info['previous'], info['total'])
     return paging_obj
