@@ -970,3 +970,31 @@ def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret, type, nu
     paging_obj = objects.PagingObject(info['href'], list_of_items, info['limit'], info['next'], info['offset'],
                                       info['previous'], info['total'])
     return paging_obj
+
+##############
+# Player API #
+##############
+
+#Done by Scott, Someone check and test these please, comment if it does/doesn't work and notify me of my errors please
+
+def skipUserPlayback(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    skipCheck = requests.post('https://api.spotify.com/v1/me/next',
+                            headers={'Authorization': 'Bearer ' + access_token})
+    return skipCheck
+
+
+def setRepeat(refresh_token, client_id, client_secret, state):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    repeatCheck = requests.put("https://api.spotify.com/v1/me/player/repeat",
+    headers={'authorization': 'Bearer' +access_token},
+                              params={'state':state})
+    return repeatCheck
+
+def userPlaybackDeviceTransfer(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    userDevicePlaybackCheck = requests.put("https://api.spotify.com/v1/me/player",
+                                           headers={'authorization': 'Bearer' +access_token},
+                                           params=['device_ids'])
+    #Somethings missing here....
+    return userDevicePlaybackCheck
