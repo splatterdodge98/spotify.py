@@ -30,11 +30,11 @@ Artist: Corresponds to the Album JSON Object given in the Spotify Web API docume
     9. type: String. The JSON Object type, which should always return "artist".
     10. userUri: String. The Spotify URI for the Artist.
     
-    Category: Corresponds to the Album JSON object given in the Spotify Web API documents, with some types omitted for simplicity's sake. Listed below are the object's attributes and their corresponding types:
-1. href: String. What "type" of album it is, "single", "album", or "compilation".
-2. icons: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
-3. id: A reference to the ExternalID Object, which contains all of the IDs for the associated Album.
-4. name: 2-String Dictionary. URLs for the album, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
+Category: Corresponds to the Album JSON object given in the Spotify Web API documents, with some types omitted for simplicity's sake. Listed below are the object's attributes and their corresponding types:
+    1. href: String. What "type" of album it is, "single", "album", or "compilation".
+    2. icons: Dictionary of artists on the album, with the key being the name and the id being the value ({name:id})
+    3. id: A reference to the ExternalID Object, which contains all of the IDs for the associated Album.
+    4. name: 2-String Dictionary. URLs for the album, with the key being the 'location' (eg: Spotify/ITunes/etc.) and the actual url being the value. ({location:url})
   
     
 CurrentlyPlayingObject: Corresponds to the CurrentlyPlayingObject JSON Object given in the Spotify Web API documents. Listed below are the object's attributes and their corresponding types:
