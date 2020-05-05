@@ -1057,7 +1057,7 @@ def setUserVolume(refresh_token, client_id, client_secret, volume_percent):
 
 def recentlyPlayedTracks(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-
+    recentHistory=
 
 
 
