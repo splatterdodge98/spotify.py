@@ -1060,7 +1060,7 @@ def stopUserPlayback(refresh_token, client_id, client_secret):
 def setUserVolume(refresh_token, client_id, client_secret, volume_percent):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
     volumeSet= requests.put("https://api.spotify.com/v1/me/player/volume",
-                            {'authorization': 'Bearer' + access_token},
+                            headers={'authorization': 'Bearer' + access_token},
                             params={'volume_percent' :volume_percent})
     return volumeSet
 ####This one I did not handle the integer (Between 1 & 100) correctly for the volume setting parameter, I don't think it should be a string {Scott}
@@ -1068,7 +1068,19 @@ def setUserVolume(refresh_token, client_id, client_secret, volume_percent):
 
 def recentlyPlayedTracks(refresh_token, client_id, client_secret):
     access_token = getAccessToken(refresh_token, client_id, client_secret)
-    recentHistory= requests
+    recentHistory= requests.get("https://api.spotify.com/v1/me/player/recently-played",
+                                headers={'authorization': 'Bearer' + access_token})
+    semiOld=[]
+    recentTracks=recentHistory.json()
+    recent={}
+    for r in recentTracks:
+        semiOld.append(objects.CursorBasedPagingObject(recent, r['href'], r['items'], r['nextPage'],
+                                                       r['cursors'], r['total'] ))
+        return objects.CursorBasedPagingObject
+
+    ####This is wrong in so many ways#####
+
+
 
 
 
