@@ -93,7 +93,8 @@ class DeviceObject:
 
 class PlaylistObject:
 
-    def __init__(self, collaborative, description, externalUrls, followers, href, playlistId, images, name, owner, public, snapshotId, tracks, type, uri):
+    def __init__(self, collaborative, description, externalUrls, followers, href, playlistId, images, name, owner,
+                 public, snapshotId, tracks, type, uri):
         self.collaborative = collaborative #Boolean
         self.description = description #string
         self.externalUrls = externalUrls #2-String Dictionary
