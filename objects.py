@@ -48,7 +48,7 @@ class PublicUserObject:
 
     def __init__(self, displayName, externalUrls, followers, href, userPublicObjectId, userProfileImages, userType, userUri):
         self.displayName = displayName # (String)	The name displayed on the user’s profile. null if not available.
-        self.extrnalUrls = externalUrls # (external URL Object) Known public external URLs for this user
+        self.externalUrls = externalUrls # (external URL Object) Known public external URLs for this user
         self.followers = followers # Int. Number of followers this user has.
         self.href = href # (String) 	A link to the Web API endpoint for this user.
         self.userPublicObjectId = userPublicObjectId # (String) The Spotify user ID for this user.
@@ -147,7 +147,7 @@ class SavedAlbum:
         self.name = name  # String
         self.releaseDate = releaseDate  # String
         self.tracks = tracks  # Dictionary with {name:id} structure
-        self.timestamp = timestamp # datetime type
+        self.timestamp = timestamp #String
         self.URI = URI  # string
 
 class ExternalId:
@@ -240,18 +240,18 @@ class PagingObject:
 
 class PlayHistoryObject:
 
-    def __init__(self, context, playedAt, track):
-        self.context = context #context object (?)
-        self.playedAt = playedAt #DateTime
-        self.track = track #Dictionary containing {name:id} structure
+    def __init__(self, context, playedAt, tracks):
+        self.context = context #context object
+        self.playedAt = playedAt #String
+        self.tracks = tracks #Dictionary containing {name:id} structure
 
 class PlaylistTrackObject:
 
     def __init__(self, addedAt, addedBy, isLocal, track):
-        self.addedAt = addedAt #DateTime
-        self.addedBy = addedBy #Public User Object (?)
-        self.isLocal = isLocal
-        self.track = track #dictionary containing {name:id} structure
+        self.addedAt = addedAt #String
+        self.addedBy = addedBy #String
+        self.isLocal = isLocal #Boolean
+        self.track = track #TrackObject
 
 class RecommendationsResponseObject:
 

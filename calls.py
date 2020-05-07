@@ -985,3 +985,115 @@ def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret, type, nu
     paging_obj = objects.PagingObject(info['href'], list_of_items, info['limit'], info['next'], info['offset'],
                                       info['previous'], info['total'])
     return paging_obj
+
+##############
+# Player API #
+##############
+
+#Done by Scott, Someone check and test these please, comment if it does/doesn't work and notify me of my errors please
+
+def skipUserPlayback(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    skipCheck = requests.post('https://api.spotify.com/v1/me/next',
+                            headers={'Authorization': 'Bearer ' + access_token})
+    return skipCheck
+
+
+def setRepeat(refresh_token, client_id, client_secret, state):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    repeatCheck = requests.put("https://api.spotify.com/v1/me/player/repeat",
+    headers={'authorization': 'Bearer' +access_token},
+                              params={'state':state})
+    return repeatCheck
+
+def userPlaybackDeviceTransfer(refresh_token, client_id, client_secret, device_ids):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    userDevicePlaybackCheck = requests.put("https://api.spotify.com/v1/me/player",
+                                           headers={'authorization': 'Bearer' +access_token},
+                                           params={'device_ids':device_ids})
+    #Somethings missing here in PlaybackDeviceTransfer.....###
+    return userDevicePlaybackCheck
+
+
+def getUserCurrentPlayingTrack(refresh_token, client_id, client_secret, market):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    userCurrentTrack = requests.get("https://api.spotify.com/v1/me/player/currently-playing",
+                                       headers={'authorization':'Bearer' +access_token},
+                                       params={'market':market})
+    playingTrackList=[]
+    currentTrack= userCurrentTrack.json()
+    trackDict={}
+    for t in currentTrack:
+            playingTrackList.append(objects.Track(t['album']['id'], trackDict, t['available_markets'],
+                                               t['disc_number'], t['duration_ms'], t['explicit'],
+                                               t['external_ids'], t['external_urls'], t['href'],
+                                               t['id'], t['name'], t['popularity'], t['preview_url'],
+                                               t['track_number'], t['type'], t['uri'], None))
+            return objects.Track
+    ###getUserCurrentPLayingTrack isn't going to work and I don't know why, (Scott)
+
+
+def seekToTrackPosition(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    seekToTrackPos = requests.put("https://api.spotify.com/v1/me/player/seek",
+                                    headers={'authorization': 'Bearer' + access_token})
+    return seekToTrackPos
+
+
+
+def skipToPreviousTrack(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    skipToPreviousSong = requests.post("https://api.spotify.com/v1/me/player/previous",
+                                  headers={'authorization': 'Bearer' + access_token})
+    return skipToPreviousSong
+
+def startUserPlayback(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    play = requests.put("https://api.spotify.com/v1/me/player/play",
+                                       headers={'authorization': 'Bearer' + access_token})
+    return play
+
+
+
+def stopUserPlayback(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    pause = requests.put("https://api.spotify.com/v1/me/player/pause",
+                        headers={'authorization': 'Bearer' + access_token})
+    return pause
+
+def setUserVolume(refresh_token, client_id, client_secret, volume_percent):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    volumeSet= requests.put("https://api.spotify.com/v1/me/player/volume",
+                            headers={'authorization': 'Bearer' + access_token},
+                            params={'volume_percent' :volume_percent})
+    return volumeSet
+####This one I did not handle the integer (Between 1 & 100) correctly for the volume setting parameter, I don't think it should be a string {Scott}
+
+
+def recentlyPlayedTracks(refresh_token, client_id, client_secret):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    recentHistory= requests.get("https://api.spotify.com/v1/me/player/recently-played",
+                                headers={'authorization': 'Bearer' + access_token})
+    semiOld=[]
+    recentTracks=recentHistory.json()
+    recent={}
+    for r in recentTracks:
+        semiOld.append(objects.CursorBasedPagingObject(recent, r['href'], r['items'], r['nextPage'],
+                                                       r['cursors'], r['total'] ))
+        return objects.CursorBasedPagingObject
+
+    ####This is wrong in so many ways#####
+
+
+
+
+
+
+
+
+
+
+
+
+
+
