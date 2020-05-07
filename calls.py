@@ -912,20 +912,29 @@ def searchForAnItem(refresh_token, client_id, client_secret, q, type):
                             params={'q': q, 'type': type})
     searchTemp = tempCall.json()
     if type == 'track':
+        if len(searchTemp['tracks']['items']) == 0:
+            return "No results found"
         items = []
         holdingArtists = {}
-        for i in searchTemp['artists']:
+        for i in searchTemp['tracks']['items']:
             holdingArtists[i['name']] = i['id']
-        items.append(objects.Track(i['id'], holdingArtists, i['available_markets'], i['disc_number'], i['duration_ms'],
+            items.append(objects.Track(i['id'], holdingArtists, i['available_markets'], i['disc_number'], i['duration_ms'],
                                    i['explicit'], None, i['external_urls'], i['href'], i['id'], i['name'], None,
                                    i['preview_url'], i['track_number'], i['type'], i['uri'], None))
-    else:
-        items = {}
-        for i in searchTemp[type]['items']:
-            items[i['name']]: i['id']
 
-    return objects.PagingObject(searchTemp[type]['href'], items, searchTemp[type]['limit'], searchTemp[type]['next'],
-                                searchTemp[type]['offset'], searchTemp[type]['previous'], searchTemp[type]['total'])
+        return objects.PagingObject(searchTemp['tracks']['href'], items, searchTemp['tracks']['limit'],
+                                    searchTemp['tracks']['next'],
+                                    searchTemp['tracks']['offset'], searchTemp['tracks']['previous'],
+                                    searchTemp['tracks']['total'])
+    else:
+        if len(searchTemp[type+'s']['items']) == 0:
+            return "No results found"
+        items = {}
+        for i in searchTemp[type+'s']['items']:
+            items[i['name']] = i['id']
+
+    return objects.PagingObject(searchTemp[type+'s']['href'], items, searchTemp[type+'s']['limit'], searchTemp[type+'s']['next'],
+                                searchTemp[type+'s']['offset'], searchTemp[type+'s']['previous'], searchTemp[type+'s']['total'])
 
 
 ################
@@ -951,7 +960,7 @@ def getManyEpisodes(refresh_token, client_id, client_secret):
 # Personalization API #
 #######################
 
-def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret, type, num=20, start=0):
+def getUsersTopArtistsandTracks(refresh_token, client_id, client_secret, type, num=20, start=0):
     if num > 50:
         num = 50
     if num < 1:
@@ -976,7 +985,7 @@ def getUsersTopArtistsandTrack(refresh_token, client_id, client_secret, type, nu
         for track in info['items']:
             artist_dict = {}
             for artist in track['artists']:
-                artist_dict[artist['name']]: artist['id']
+                artist_dict[artist['name']] = artist['id']
             list_of_items.append(objects.Track(track['album']['id'], artist_dict, track['available_markets'],
                                                track['disc_number'], track['duration_ms'], track['explicit'],
                                                track['external_ids'], track['external_urls'], track['href'],
