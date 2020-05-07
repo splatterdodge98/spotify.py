@@ -562,6 +562,7 @@ def getOtherUsersProfile(refresh_token, client_id, client_secret, user_id):
     starting_info = requests.get("https://api.spotify.com/v1/users/%s" % user_id,
                                  headers={'Authorization': 'Bearer ' + access_token})
     real_info = starting_info.json()
+    return real_info
     list_of_images = []
     for image in real_info['images']:
         list_of_images.append(image['url'])
@@ -641,7 +642,9 @@ def getACategorysPlaylists(refresh_token, client_id, client_secret, category_id,
         list_of_images = []
         for image in playlist['images']:
             list_of_images.append(image['url'])
-        temp_playlist = objects.PlaylistObject(playlist['collaborative'], playlist['external_urls'], playlist['href'],
+        temp_playlist = objects.PlaylistObject(playlist['collaborative'], playlist['description'],
+                                               playlist['external_urls'],
+                                               None, playlist['href'],
                                                playlist['id'], list_of_images, playlist['name'],
                                                playlist['owner']['display_name'], playlist['public'],
                                                playlist['snapshot_id'], playlist['tracks'], playlist['type'],
@@ -731,7 +734,8 @@ def getAllFeaturedPlaylists(refresh_token, client_id, client_secret, num=20, sta
         list_of_images = []
         for image in playlist['images']:
             list_of_images.append(image['url'])
-        list_of_playlists.append(objects.PlaylistObject(playlist['collaborative'], playlist['external_urls'],
+        list_of_playlists.append(objects.PlaylistObject(playlist['collaborative'], playlist['description'],
+                                                        playlist['external_urls'], None,
                                                         playlist['href'], playlist['id'], list_of_images,
                                                         playlist['name'], playlist['owner']['display_name'],
                                                         playlist['public'], playlist['snapshot_id'],
@@ -779,7 +783,7 @@ def followAPlaylist(refresh_token, client_id, client_secret, playlist_id):
     return starting_info
 
 
-def getUsersFollowedArtists(refresh_token, client_id, client_secret, type, num=20):
+def getUsersFollowedArtists(refresh_token, client_id, client_secret, type='artist', num=20):
     if num > 50:
         num = 50
     if num < 1:
