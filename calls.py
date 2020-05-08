@@ -1088,14 +1088,39 @@ def recentlyPlayedTracks(refresh_token, client_id, client_secret):
     recent={}
     for r in recentTracks:
         semiOld.append(objects.CursorBasedPagingObject(recent, r['href'], r['items'], r['nextPage'],
-                                                       r['cursors'], r['total'] ))
-        return objects.CursorBasedPagingObject
+                                                       r['cursors'], r['total']))
+    return objects.CursorBasedPagingObject
 
     ####This is wrong in so many ways#####
 
 
 
+def availableUserDevices(refresh_token, client_id, client_secret,):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    devicesAvailable=requests.get("https://api.spotify.com/v1/me/player/devices",
+                                  headers={'authorization': 'Bearer' + access_token})
+    devices=[]
+    available=devicesAvailable.json()
+    userDevices={}
+    for d in available:
+        devices.append(objects.DeviceObject(userDevices, d['deviceId'], d['isActive'], d['isPrivateSession'],
+                                            d['isRestricted'], d['name'], d['type'], d['volumePercent']))
 
+    return objects.DeviceObject
+
+
+def toggleShuffle(refresh_token, client_id, client_secret,):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    shuffleToggle=requests.put("https://api.spotify.com/v1/me/player/shuffle",
+                               headers={'authorization': 'Bearer' + access_token})
+    return shuffleToggle
+
+
+def addToQueue(refresh_token, client_id, client_secret,):
+    access_token = getAccessToken(refresh_token, client_id, client_secret)
+    queueSong=requests.post('https://api.spotify.com/v1/me/player/queue',
+                            headers={'authorization': 'Bearer' + access_token})
+    return queueSong
 
 
 
